@@ -1,0 +1,13 @@
+applications:
+- path: target/JavaHelloWorldApp.war
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: bolpax
+  host: bolpax
+  disk_quota: 1024M
+  services:
+  - ClearDB MySQL Database-ue
+  - SQL Database-0f
+  - mysql-ly
+  - eCash API-nu
