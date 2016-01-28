@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="issue_status")
 public class IssueStatus {
@@ -20,9 +22,6 @@ public class IssueStatus {
 	
 	@Column(name = "status", length = 200)
 	private String status;
-	
-	@Column(name = "status_desc", length = 200)
-	private String statusDesc;
 	
 	@OneToMany(mappedBy = "issueStatus")
     private Set<IssueTrail> issueTrails;
@@ -43,14 +42,7 @@ public class IssueStatus {
 		this.status = status;
 	}
 
-	public String getStatusDesc() {
-		return statusDesc;
-	}
-
-	public void setStatusDesc(String statusDesc) {
-		this.statusDesc = statusDesc;
-	}
-
+	@JsonIgnore
 	public Set<IssueTrail> getIssueTrails() {
 		return issueTrails;
 	}

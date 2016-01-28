@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="trx")
 public class Transaction {
@@ -80,6 +82,7 @@ public class Transaction {
 		this.merchant = merchant;
 	}
 
+	@JsonIgnore
 	public Set<TransactionTrail> getTrxTrails() {
 		return trxTrails;
 	}
@@ -88,6 +91,7 @@ public class Transaction {
 		this.trxTrails = trxTrails;
 	}
 
+	@JsonIgnore
 	public Set<Issue> getIssues() {
 		return issues;
 	}

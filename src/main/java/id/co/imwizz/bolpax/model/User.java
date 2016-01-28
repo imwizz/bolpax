@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="user")
 public class User {
@@ -18,13 +20,13 @@ public class User {
 	@Column(name = "user_id")
 	private long userId;
 	
-	@Column(name = "email", length = 100)
+	@Column(name = "email", length = 100, unique=true)
 	private String email;
 	
 	@Column(name = "password", length = 10)
 	private String password;
 	
-	@Column(name = "phone")
+	@Column(name = "phone", length = 20, unique=true)
 	private String phone;
 	
 	@Column(name = "fullname", length = 200)
@@ -73,6 +75,7 @@ public class User {
 		this.fullname = fullname;
 	}
 
+	@JsonIgnore
 	public Set<Transaction> getTransactions() {
 		return transactions;
 	}

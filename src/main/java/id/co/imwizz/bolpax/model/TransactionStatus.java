@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="trx_status")
 public class TransactionStatus {
@@ -51,6 +53,7 @@ public class TransactionStatus {
 		this.statusDesc = statusDesc;
 	}
 
+	@JsonIgnore
 	public Set<TransactionTrail> getTrxTrails() {
 		return trxTrails;
 	}

@@ -20,19 +20,41 @@
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
-    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/> 
+    <tx:annotation-driven proxy-target-class="true"/> 
     
     <!-- <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/GokeelDS"/> -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:8889/bolpax_db" />
+        <property name="url" value="jdbc:mysql://bolpaxinstance.c65fdal6qepx.ap-southeast-1.rds.amazonaws.com:3306/db_bolpax" />
         <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="password" value="password" />
     </bean>
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="id.co.imwizz.bolpax.model" />
+      	<property name="jpaVendorAdapter">
+         	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+      	</property>
+      	<property name="jpaProperties">
+         	<props>
+	            <prop key="hibernate.hbm2ddl.auto">update</prop>
+	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+         	</props>
+      	</property>
     </bean>
+    
+    <!-- <bean class="id.co.imwizz.bolpax.dao.impl.GenericDaoImpl" id="genericDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.IssueDaoImpl" id="issueDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.IssueStatusDaoImpl" id="issueStatusDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.IssueTrailDaoImpl" id="issueTrailDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.MerchantDaoImpl" id="merchantDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.TransactionDaoImpl" id="trxDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.TransactionStatusDaoImpl" id="trxStatusDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.TransactionTrailDaoImpl" id="trxTrailDao" />
+    <bean class="id.co.imwizz.bolpax.dao.impl.UserDaoImpl" id="userDao" /> -->
     
 </beans>

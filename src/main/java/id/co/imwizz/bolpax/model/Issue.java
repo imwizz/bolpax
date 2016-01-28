@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="issue")
 public class Issue {
@@ -76,6 +78,7 @@ public class Issue {
 		this.trx = trx;
 	}
 
+	@JsonIgnore
 	public Set<IssueTrail> getIssueTrails() {
 		return issueTrails;
 	}

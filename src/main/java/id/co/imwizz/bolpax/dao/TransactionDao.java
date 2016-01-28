@@ -4,4 +4,6 @@ import id.co.imwizz.bolpax.model.Transaction;
 
 public interface TransactionDao extends GenericDao<Transaction>{
 
+	public Transaction findTrxByUserId(long userId);
+	
 }

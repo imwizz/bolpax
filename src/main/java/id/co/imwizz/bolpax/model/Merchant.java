@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="merchant")
 public class Merchant {
@@ -54,6 +56,7 @@ public class Merchant {
 		this.user = user;
 	}
 
+	@JsonIgnore
 	public Set<Transaction> getTransactions() {
 		return transactions;
 	}

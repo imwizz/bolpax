@@ -19,8 +19,8 @@ public class IssueTrail {
 	@Column(name = "issue_trail_id")
 	private long issueTrailId;
 	
-	@Column(name = "role", length = 10)
-	private String role;
+	@Column(name = "from_admin", length = 1)
+	private Character fromAdmin;
 
 	@Column(name = "issue_message", length = 200)
 	private String issueMessage;
@@ -45,12 +45,12 @@ public class IssueTrail {
 		this.issueTrailId = issueTrailId;
 	}
 
-	public String getRole() {
-		return role;
+	public Character getFromAdmin() {
+		return fromAdmin;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setFromAdmin(Character fromAdmin) {
+		this.fromAdmin = fromAdmin;
 	}
 
 	public String getIssueMessage() {

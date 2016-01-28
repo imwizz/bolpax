@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.transaction.annotation.Transactional;
 
-public class GenericDaoImpl<T> implements GenericDao<T> {
+public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 	
 	@PersistenceContext
 	protected EntityManager em;
@@ -76,6 +76,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Object id) {
 		if (this.em == null) this.em = entityManager();
         if (this.em.contains(this)) {
