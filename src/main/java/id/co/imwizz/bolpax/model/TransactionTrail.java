@@ -1,11 +1,14 @@
 package id.co.imwizz.bolpax.model;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,9 +22,6 @@ public class TransactionTrail {
 	@Column(name = "trx_trail_id")
 	private long trxTrailId;
 	
-	@Column(name = "role", length = 10)
-	private String role;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "sts_date")
     private java.util.Date stsDate;
@@ -33,6 +33,11 @@ public class TransactionTrail {
 	@ManyToOne
     @JoinColumn(name = "trx_status_id", referencedColumnName = "trx_status_id", nullable = false)
 	private TransactionStatus trxStatus;
+	
+	@PrePersist
+    protected void onCreate() {
+		stsDate = Calendar.getInstance().getTime();
+    }
 
 	public long getTrxTrailId() {
 		return trxTrailId;
@@ -40,14 +45,6 @@ public class TransactionTrail {
 
 	public void setTrxTrailId(long trxTrailId) {
 		this.trxTrailId = trxTrailId;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 
 	public java.util.Date getStsDate() {

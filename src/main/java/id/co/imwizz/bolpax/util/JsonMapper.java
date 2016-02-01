@@ -1,5 +1,9 @@
 package id.co.imwizz.bolpax.util;
 
+import id.co.imwizz.bolpax.model.Merchant;
+import id.co.imwizz.bolpax.model.User;
+import id.co.imwizz.bolpax.model.rest.TransactionRS;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -94,5 +98,16 @@ public class JsonMapper<T> {
 			e.printStackTrace();
 		}
 		return myObjects;
+	}
+	
+	
+	public static void main(String[] args) {
+		TransactionRS trs = new TransactionRS();
+		trs.setAmount(2000.00);
+		trs.setMerchantId(2);
+		trs.setUserId(2);
+		trs.setProduct("sabun");
+		
+		System.out.println(fromObjectToJson(trs));
 	}
 }

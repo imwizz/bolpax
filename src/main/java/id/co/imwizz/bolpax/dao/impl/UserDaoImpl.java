@@ -19,7 +19,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
 
 	@Override
 	public User findUserByPhone(String phone) {
-		User user = null;
+		User user = new User();
 		try {
 			user = (User) em.createQuery("SELECT o FROM User o where o.phone = :phone", User.class).setParameter("phone", phone).getSingleResult();
 		} catch (NoResultException nre){

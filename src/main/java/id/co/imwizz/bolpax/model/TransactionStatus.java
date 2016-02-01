@@ -26,6 +26,17 @@ public class TransactionStatus {
 	@Column(name = "status_desc", length = 200)
 	private String statusDesc;
 	
+	@Column(name = "role", length = 10)
+	private String role;
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@OneToMany(mappedBy = "trxStatus")
     private Set<TransactionTrail> trxTrails;
 

@@ -1,11 +1,14 @@
 package id.co.imwizz.bolpax.model;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +39,11 @@ public class IssueTrail {
 	@ManyToOne
     @JoinColumn(name = "issue_status_id", referencedColumnName = "issue_status_id", nullable = false)
 	private IssueStatus issueStatus;
+	
+	@PrePersist
+    protected void onCreate() {
+		stsDate = Calendar.getInstance().getTime();
+    }
 
 	public long getIssueTrailId() {
 		return issueTrailId;
