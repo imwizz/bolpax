@@ -347,6 +347,16 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.7</version>
             </plugin>
+            <plugin>
+                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <configuration>
+                    <configFile>src/main/wlp/server.xml</configFile>
+                    <bootstrapProperties>
+                        <appLocation>../../../../../${project.build.finalName}</appLocation>
+                    </bootstrapProperties>
+                </configuration>
+            </plugin>
             <!-- IDE -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

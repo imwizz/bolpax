@@ -4,6 +4,7 @@ import id.co.imwizz.bolpax.dao.MerchantDao;
 import id.co.imwizz.bolpax.dao.UserDao;
 import id.co.imwizz.bolpax.model.Merchant;
 import id.co.imwizz.bolpax.model.User;
+import id.co.imwizz.bolpax.model.rest.request.MerchantReq;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,15 @@ public class ProfileController {
 	
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "createMerchant")
 	public ResponseEntity<String> createMerchant(@RequestBody String json) {
-		JsonMapper<Merchant> jMapper = new JsonMapper<Merchant>(Merchant.class);
-		Merchant obj = jMapper.fromJsonToObject(json);
-		merchantDao.persist(obj);
+		JsonMapper<MerchantReq> jMapper = new JsonMapper<MerchantReq>(MerchantReq.class);
+		MerchantReq merhcantReq = jMapper.fromJsonToObject(json);
+		
+		String merchantName = merhcantReq.getName();
+		User user = userDao.get(merhcantReq.getUserId());
+		
+		Merchant merchant = new Merchant(merchantName, user);
+		
+		merchantDao.persist(merchant);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);

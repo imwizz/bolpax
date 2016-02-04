@@ -17,6 +17,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @Table(name="issue")
 public class Issue {
 	
+	public Issue() {}
+	
+	public Issue(String subject, String reporterRole, Transaction trx) {
+		this.subject = subject;
+		this.reporterRole = reporterRole;
+		this.trx = trx;
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "issue_id")
@@ -24,9 +32,6 @@ public class Issue {
 	
 	@Column(name = "subject", length = 200)
 	private String subject;
-	
-	@Column(name = "issue_desc", length = 200)
-	private String issueDesc;
 	
 	@Column(name = "reporter_role", length = 10)
 	private String reporterRole;
@@ -52,14 +57,6 @@ public class Issue {
 
 	public void setSubject(String subject) {
 		this.subject = subject;
-	}
-
-	public String getIssueDesc() {
-		return issueDesc;
-	}
-
-	public void setIssueDesc(String issueDesc) {
-		this.issueDesc = issueDesc;
 	}
 
 	public String getReporterRole() {

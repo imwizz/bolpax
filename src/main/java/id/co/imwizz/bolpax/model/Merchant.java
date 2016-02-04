@@ -31,6 +31,13 @@ public class Merchant {
 	
 	@OneToMany(mappedBy = "merchant")
     private Set<Transaction> transactions;
+	
+	public Merchant() {}
+	
+	public Merchant(String merchantName, User user) {
+		this.merchantName = merchantName;
+		this.user = user;
+	}
 
 	public long getMerchantId() {
 		return merchantId;

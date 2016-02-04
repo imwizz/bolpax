@@ -1,6 +1,6 @@
-package id.co.imwizz.bolpax.model.rest;
+package id.co.imwizz.bolpax.model.rest.request;
 
-public class TransactionRS {
+public class TransactionReq {
 	
 	private long userId;
 	private long merchantId;

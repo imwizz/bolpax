@@ -1,6 +1,6 @@
-package id.co.imwizz.bolpax.model.rest;
+package id.co.imwizz.bolpax.model.rest.request;
 
-public class IssueRS {
+public class IssueReq {
 	
 	private String subject;
 	private String desc;

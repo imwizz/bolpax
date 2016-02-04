@@ -1,6 +1,6 @@
-package id.co.imwizz.bolpax.model.rest;
+package id.co.imwizz.bolpax.model.rest.request;
 
-public class IssueTrailRS {
+public class IssueTrailReq {
 	
 	private Character fromAdmin;
 	private String message;

@@ -17,6 +17,16 @@ import javax.persistence.TemporalType;
 @Table(name="issue_trail")
 public class IssueTrail {
 	
+	public IssueTrail() {}
+	
+	public IssueTrail(Character fromAdmin, String issueMessage, Issue issue,
+			IssueStatus issueStatus) {
+		this.fromAdmin = fromAdmin;
+		this.issueMessage = issueMessage;
+		this.issue = issue;
+		this.issueStatus = issueStatus;
+	}
+
 	@Id
 	@GeneratedValue
 	@Column(name = "issue_trail_id")

@@ -1,7 +1,7 @@
-package id.co.imwizz.bolpax.model.rest;
+package id.co.imwizz.bolpax.model.rest.response;
 
-public class MerchantRS {
-
+public class MerchantRsp {
+	
 	private String name;
 	private long userid;
 	
@@ -17,4 +17,5 @@ public class MerchantRS {
 	public void setUserid(long userid) {
 		this.userid = userid;
 	}
+
 }

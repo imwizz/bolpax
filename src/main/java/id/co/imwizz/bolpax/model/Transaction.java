@@ -16,9 +16,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @Entity
 @Table(name="trx")
 public class Transaction {
+	
+	public Transaction() {}
 
 	public Transaction(String productName, Double amount, User user, Merchant merchant) {
-		super();
 		this.productName = productName;
 		this.amount = amount;
 		this.user = user;

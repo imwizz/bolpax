@@ -1,6 +1,6 @@
-package id.co.imwizz.bolpax.model.rest;
+package id.co.imwizz.bolpax.model.rest.request;
 
-public class TransactionTrailRS {
+public class TransactionTrailReq {
 	
 	private long trxId;
 	private long trxStatusId;

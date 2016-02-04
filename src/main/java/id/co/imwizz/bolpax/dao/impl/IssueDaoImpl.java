@@ -1,5 +1,7 @@
 package id.co.imwizz.bolpax.dao.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,13 @@ public class IssueDaoImpl extends GenericDaoImpl<Issue> implements IssueDao {
 	}
 
 	@Override
-	public Issue findIssueByTrxId(long trxId) {
+	public List<Issue> findIssueByUserId(long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Issue> findIssueByMerchantId(long merchantId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

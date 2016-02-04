@@ -4,7 +4,7 @@
     
     <display-name>bolpax-backend</display-name>
     
-    <description>Roo generated gokeel-springroo application</description>
+    <description>Roo generated bolpax-backend application</description>
 
     
     <context-param>
@@ -61,17 +61,4 @@
         <servlet-name>bolpax-backend</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping>
-	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.png</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.jpg</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.jpeg</url-pattern>
-	</servlet-mapping>
 </web-app>

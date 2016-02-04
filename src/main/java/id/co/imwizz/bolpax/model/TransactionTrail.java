@@ -16,6 +16,13 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="trx_trail")
 public class TransactionTrail {
+	
+	public TransactionTrail() {}
+	
+	public TransactionTrail(Transaction trx, TransactionStatus trxStatus) {
+		this.trx = trx;
+		this.trxStatus = trxStatus;
+	}
 
 	@Id
 	@GeneratedValue
