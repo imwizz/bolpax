@@ -10,8 +10,13 @@ import id.co.imwizz.bolpax.model.IssueTrail;
 import id.co.imwizz.bolpax.model.Transaction;
 import id.co.imwizz.bolpax.model.rest.request.IssueReq;
 import id.co.imwizz.bolpax.model.rest.request.IssueTrailReq;
+import id.co.imwizz.bolpax.model.rest.response.IssueDetailRsp;
+import id.co.imwizz.bolpax.model.rest.response.IssueRsp;
+import id.co.imwizz.bolpax.model.rest.response.IssueTrailRsp;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +52,56 @@ public class IssueController {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         
-        List<Issue> trxs = issueDao.findIssueByUserId(userid);
-        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxs), headers, HttpStatus.OK);
+        List<Issue> issues = issueDao.findIssueByUserId(userid);
+        List<IssueRsp> issueRsps = new ArrayList<>();
+        for (Issue issue : issues) {
+        	IssueRsp issueRsp = new IssueRsp();
+        	issueRsp.setIssueId(issue.getIssueId());
+        	issueRsp.setAmount(issue.getTrx().getAmount());
+        	issueRsp.setSuspect(getSuspect(issue));
+        	issueRsp.setIssueLastStatus(issue.getSubject());
+        	
+        	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+		    String issueLastDate = null;
+		    while(itr.hasNext()) {
+		    	IssueTrail issueTrail =(IssueTrail) itr.next();
+		    	issueLastDate = issueTrail.getStsDate().toString();
+		    }
+        	issueRsp.setIssueDate(issueLastDate);
+        	
+        	issueRsps.add(issueRsp);
+		}
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(issueRsps), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbymerchant")
     @ResponseBody
-	public ResponseEntity<String> getListByMerchantId(@RequestParam("merchantId") long merchantId) {
+	public ResponseEntity<String> getListByMerchantId(@RequestParam("merchantid") long merchantId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         
-        List<Issue> trxs = issueDao.findIssueByMerchantId(merchantId);
-        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxs), headers, HttpStatus.OK);
+        List<Issue> issues = issueDao.findIssueByMerchantId(merchantId);
+        List<IssueRsp> issueRsps = new ArrayList<>();
+        for (Issue issue : issues) {
+        	IssueRsp issueRsp = new IssueRsp();
+        	issueRsp.setIssueId(issue.getIssueId());
+        	issueRsp.setAmount(issue.getTrx().getAmount());
+        	issueRsp.setSuspect(getSuspect(issue));
+        	issueRsp.setIssueLastStatus(issue.getSubject());
+        	
+        	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+		    String issueLastDate = null;
+		    while(itr.hasNext()) {
+		    	IssueTrail issueTrail =(IssueTrail) itr.next();
+		    	issueLastDate = issueTrail.getStsDate().toString();
+		    }
+        	issueRsp.setIssueDate(issueLastDate);
+        	
+        	issueRsps.add(issueRsp);
+		}
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(issueRsps), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detail")
@@ -68,7 +111,27 @@ public class IssueController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         
         Issue issue = issueDao.get(issueid);
-        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issue), headers, HttpStatus.OK);
+        
+        IssueDetailRsp issueRsp = new IssueDetailRsp();
+        issueRsp.setSuspect(getSuspect(issue));
+        issueRsp.setAmount(issue.getTrx().getAmount());
+        issueRsp.setProduct(issue.getTrx().getProductName());
+        issueRsp.setIssueLastStatus(issue.getSubject());
+        
+        List<IssueTrailRsp> issueTrailRsps = new ArrayList<IssueTrailRsp>();
+        Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+        while(itr.hasNext()) {
+        	IssueTrail issueTrail = itr.next();
+        	IssueTrailRsp issueTrailRsp = new IssueTrailRsp();
+        	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin().toString());
+        	issueTrailRsp.setMessage(issueTrail.getIssueMessage());
+        	issueTrailRsp.setTime(issueTrail.getStsDate().toString());
+        	issueTrailRsps.add(issueTrailRsp);
+        }
+        
+        issueRsp.setIssueHistory(issueTrailRsps);
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueRsp), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "create")
@@ -110,6 +173,18 @@ public class IssueController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+	}
+	
+	private String getSuspect(Issue issue) {
+		String suspect = null;
+		String role = issue.getReporterRole();
+		if(role.equals("buyer")) {
+			suspect = issue.getTrx().getMerchant().getMerchantName();
+		} else if(role.equals("merchant")) {
+			suspect = issue.getTrx().getUser().getFullname();
+		}
+		
+		return suspect;
 	}
 	
 }

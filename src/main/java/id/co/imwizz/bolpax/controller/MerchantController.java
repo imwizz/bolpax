@@ -25,7 +25,7 @@ public class MerchantController {
 
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
     @ResponseBody
-	public ResponseEntity<String> findUserByPhone(@RequestParam("userId") long userId) {
+	public ResponseEntity<String> findUserByPhone(@RequestParam("userid") long userId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         List<Merchant> merchants = merchantDao.findMerchantsExceptMe(userId);

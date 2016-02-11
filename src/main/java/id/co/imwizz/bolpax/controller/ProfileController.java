@@ -5,6 +5,7 @@ import id.co.imwizz.bolpax.dao.UserDao;
 import id.co.imwizz.bolpax.model.Merchant;
 import id.co.imwizz.bolpax.model.User;
 import id.co.imwizz.bolpax.model.rest.request.MerchantReq;
+import id.co.imwizz.bolpax.model.rest.response.LoginRsp;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +28,35 @@ public class ProfileController {
 	
 	@Autowired
 	private MerchantDao merchantDao;
+	
+	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "dologin")
+    @ResponseBody
+	public ResponseEntity<String> doLogin(@RequestParam("phone") String phone, @RequestParam("pass") String pass) {
+		HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        User user = userDao.findUserByPhone(phone);
+        
+        //TODO list call login API Mandiri
+        
+        LoginRsp login = new LoginRsp();
+        login.setUserId(user.getUserId());
+        login.setToken(null);
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(login), headers, HttpStatus.OK);
+	}
 
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "user")
     @ResponseBody
-	public ResponseEntity<String> findUserByPhone(@RequestParam("phone") String phone) {
+	public ResponseEntity<String> findUserById(@RequestParam("userid") String userid, @RequestParam("token") String token) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        User result = userDao.findUserByPhone(phone);
+        User result = userDao.get(userid);
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(result), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "merchant")
     @ResponseBody
-	public ResponseEntity<String> findMerchantById(@RequestParam("userid") long userId) {
+	public ResponseEntity<String> findMerchantById(@RequestParam("userid") long userId, @RequestParam("token") String token) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         Merchant result = merchantDao.findMerchantByUserId(userId);

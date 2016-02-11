@@ -24,9 +24,10 @@ public class MerchantDaoImpl extends GenericDaoImpl<Merchant> implements Merchan
 	public Merchant findMerchantByUserId(long userId) {
 		Merchant merchant = new Merchant();
 		try {
-			Object[] result = em.createQuery("SELECT m.merchantId, m.merchantName FROM Merchant m join m.user u where u.userId = :userId", Object[].class).setParameter("userId", userId).getSingleResult();
-		    merchant.setMerchantId((long) result[0]);
-		    merchant.setMerchantName((String) result[1]);
+//			Object[] result = em.createQuery("SELECT m.merchantId, m.merchantName FROM Merchant m join m.user u where u.userId = :userId", Object[].class).setParameter("userId", userId).getSingleResult();
+//		    merchant.setMerchantId((long) result[0]);
+//		    merchant.setMerchantName((String) result[1]);
+		    merchant = em.createQuery("SELECT m FROM Merchant m join m.user u where u.userId = :userId", Merchant.class).setParameter("userId", userId).getSingleResult();
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {

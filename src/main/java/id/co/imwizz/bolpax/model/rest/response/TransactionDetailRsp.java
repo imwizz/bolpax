@@ -1,26 +1,15 @@
 package id.co.imwizz.bolpax.model.rest.response;
 
-public class TransactionRsp {
+import java.util.List;
+
+public class TransactionDetailRsp {
 	
-	private long trxId;
-	private String trxDate;
-	private String trxLastStatus;
 	private Double amount;
 	private String merchant;
 	private String product;
+	private String trxLastStatus;
+	private List<TransactionTrailRsp> trxHistory;
 	
-	public String getTrxDate() {
-		return trxDate;
-	}
-	public void setTrxDate(String trxDate) {
-		this.trxDate = trxDate;
-	}
-	public String getTrxLastStatus() {
-		return trxLastStatus;
-	}
-	public void setTrxLastStatus(String trxLastStatus) {
-		this.trxLastStatus = trxLastStatus;
-	}
 	public Double getAmount() {
 		return amount;
 	}
@@ -39,11 +28,18 @@ public class TransactionRsp {
 	public void setProduct(String product) {
 		this.product = product;
 	}
-	public long getTrxId() {
-		return trxId;
+	public String getTrxLastStatus() {
+		return trxLastStatus;
 	}
-	public void setTrxId(long trxId) {
-		this.trxId = trxId;
+	public void setTrxLastStatus(String trxLastStatus) {
+		this.trxLastStatus = trxLastStatus;
+	}
+	public List<TransactionTrailRsp> getTrxHistory() {
+		return trxHistory;
+	}
+	public void setTrxHistory(List<TransactionTrailRsp> trxHistory) {
+		this.trxHistory = trxHistory;
 	}
 
+	
 }

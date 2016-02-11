@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -40,7 +41,7 @@ public class Issue {
     @JoinColumn(name = "trx_id", referencedColumnName = "trx_id", nullable = false)
 	private Transaction trx;
 	
-	@OneToMany(mappedBy = "issue")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
     private Set<IssueTrail> issueTrails;
 
 	public long getIssueId() {

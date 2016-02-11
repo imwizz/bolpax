@@ -1,7 +1,5 @@
 package id.co.imwizz.bolpax.controller;
 
-import java.util.List;
-
 import id.co.imwizz.bolpax.dao.MerchantDao;
 import id.co.imwizz.bolpax.dao.TransactionDao;
 import id.co.imwizz.bolpax.dao.TransactionStatusDao;
@@ -14,7 +12,14 @@ import id.co.imwizz.bolpax.model.TransactionTrail;
 import id.co.imwizz.bolpax.model.User;
 import id.co.imwizz.bolpax.model.rest.request.TransactionReq;
 import id.co.imwizz.bolpax.model.rest.request.TransactionTrailReq;
+import id.co.imwizz.bolpax.model.rest.response.TransactionDetailRsp;
+import id.co.imwizz.bolpax.model.rest.response.TransactionRsp;
+import id.co.imwizz.bolpax.model.rest.response.TransactionTrailRsp;
 import id.co.imwizz.bolpax.util.JsonMapper;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -53,17 +58,65 @@ public class TransactionController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         
         List<Transaction> trxs = trxDao.findTrxByUserId(userid);
-        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxs), headers, HttpStatus.OK);
+        List<TransactionRsp> trxRsps = new ArrayList<TransactionRsp>();
+        
+        for (Transaction trx : trxs) {
+			TransactionRsp trxRsp = new TransactionRsp();
+			trxRsp.setTrxId(trx.getTrxId());
+			trxRsp.setAmount(trx.getAmount());
+			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
+			trxRsp.setProduct(trx.getProductName());
+			
+			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
+		    String trxLastDate = null;
+		    String trxLastStatus = null;
+		    while(itr.hasNext()) {
+		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
+		    	trxLastDate = trxTrail.getStsDate().toString();
+		    	trxLastStatus = trxTrail.getTrxStatus().getStatus();
+		    }
+			
+			trxRsp.setTrxDate(trxLastDate); 
+			trxRsp.setTrxLastStatus(trxLastStatus); 
+			
+			trxRsps.add(trxRsp);
+		}
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbymerchant")
     @ResponseBody
-	public ResponseEntity<String> getListByMerchant(@RequestParam("userid") long userid) {
+	public ResponseEntity<String> getListByMerchant(@RequestParam("merchantId") long merchantId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         
-        List<Transaction> trxs = trxDao.findTrxByUserId(userid);
-        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxs), headers, HttpStatus.OK);
+        List<Transaction> trxs = trxDao.findTrxByMerchantId(merchantId);
+        List<TransactionRsp> trxRsps = new ArrayList<TransactionRsp>();
+        
+        for (Transaction trx : trxs) {
+			TransactionRsp trxRsp = new TransactionRsp();
+			trxRsp.setTrxId(trx.getTrxId());
+			trxRsp.setAmount(trx.getAmount());
+			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
+			trxRsp.setProduct(trx.getProductName());
+			
+			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
+		    String trxLastDate = null;
+		    String trxLastStatus = null;
+		    while(itr.hasNext()) {
+		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
+		    	trxLastDate = trxTrail.getStsDate().toString();
+		    	trxLastStatus = trxTrail.getTrxStatus().getStatus();
+		    }
+			
+			trxRsp.setTrxDate(trxLastDate); 
+			trxRsp.setTrxLastStatus(trxLastStatus); 
+			
+			trxRsps.add(trxRsp);
+		}
+        
+        return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detail")
@@ -73,13 +126,35 @@ public class TransactionController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         
         Transaction trx = trxDao.get(trxid);
-        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trx), headers, HttpStatus.OK);
+        
+        TransactionDetailRsp trxDetailRsp = new TransactionDetailRsp();
+        trxDetailRsp.setAmount(trx.getAmount());
+        trxDetailRsp.setMerchant(trx.getMerchant().getMerchantName());
+        trxDetailRsp.setProduct(trx.getProductName());
+		
+		Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
+		List<TransactionTrailRsp> trxTrailRsps = new ArrayList<TransactionTrailRsp>();
+		String lastStatus = null;
+	    while(itr.hasNext()) {
+	    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
+	    	TransactionTrailRsp trxTrailRsp = new TransactionTrailRsp();
+	    	trxTrailRsp.setTime(trxTrail.getStsDate().toString());
+	    	trxTrailRsp.setStatus(trxTrail.getTrxStatus().getStatusDesc());
+	    	lastStatus = trxTrail.getTrxStatus().getStatus();
+	    	trxTrailRsps.add(trxTrailRsp);
+	    }
+		trxDetailRsp.setTrxHistory(trxTrailRsps);
+		trxDetailRsp.setTrxLastStatus(lastStatus);
+		
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trxDetailRsp), headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "payment")
 	public ResponseEntity<String> createPayment(@RequestBody String json) {
 		JsonMapper<TransactionReq> jMapper = new JsonMapper<TransactionReq>(TransactionReq.class);
 		TransactionReq trxRs = jMapper.fromJsonToObject(json);
+		
+		//TODO list call transfer API Mandiri
 		
 		Double amt = trxRs.getAmount();
 		Merchant merchant = merchantDao.get(trxRs.getMerchantId());

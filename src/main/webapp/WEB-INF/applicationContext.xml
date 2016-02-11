@@ -44,6 +44,13 @@
     <constructor-arg value="json"/>
   </bean>
 
-
+<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+    <property name="autodetectAnnotations" value="true" />
+    <property name="aliases">
+      <props>
+        <prop key="transaction">id.co.imwizz.bolpax.controller.TransactionController</prop>
+      </props>
+    </property>
+  </bean>
 
 </beans>

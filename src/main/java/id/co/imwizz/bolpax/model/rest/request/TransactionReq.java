@@ -6,6 +6,7 @@ public class TransactionReq {
 	private long merchantId;
 	private Double amount;
 	private String product;
+	private String token;
 	
 	public long getUserId() {
 		return userId;
@@ -30,6 +31,12 @@ public class TransactionReq {
 	}
 	public void setProduct(String product) {
 		this.product = product;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }
