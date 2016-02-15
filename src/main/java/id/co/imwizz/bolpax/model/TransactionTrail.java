@@ -19,9 +19,9 @@ public class TransactionTrail {
 	
 	public TransactionTrail() {}
 	
-	public TransactionTrail(Transaction trx, TransactionStatus trxStatus) {
+	public TransactionTrail(Transaction trx, TransactionStatusMapping trxStatusMapping) {
 		this.trx = trx;
-		this.trxStatus = trxStatus;
+		this.trxStatusMapping = trxStatusMapping;
 	}
 
 	@Id
@@ -38,8 +38,8 @@ public class TransactionTrail {
 	private Transaction trx;
 	
 	@ManyToOne
-    @JoinColumn(name = "trx_status_id", referencedColumnName = "trx_status_id", nullable = false)
-	private TransactionStatus trxStatus;
+    @JoinColumn(name = "trx_status_mapping_id", referencedColumnName = "trx_status_mapping_id", nullable = false)
+	private TransactionStatusMapping trxStatusMapping;
 	
 	@PrePersist
     protected void onCreate() {
@@ -69,14 +69,13 @@ public class TransactionTrail {
 	public void setTrx(Transaction trx) {
 		this.trx = trx;
 	}
-
-	public TransactionStatus getTrxStatus() {
-		return trxStatus;
+	
+	public TransactionStatusMapping getTrxStatusMapping() {
+		return trxStatusMapping;
 	}
 
-	public void setTrxStatus(TransactionStatus trxStatus) {
-		this.trxStatus = trxStatus;
+	public void setTrxStatusMapping(TransactionStatusMapping trxStatusMapping) {
+		this.trxStatusMapping = trxStatusMapping;
 	}
-	
-	
+
 }

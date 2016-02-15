@@ -25,6 +25,7 @@ public class TransactionDaoImpl extends GenericDaoImpl<Transaction> implements T
 		List<Transaction> trxs = new ArrayList<Transaction>();
 		try {
 			trxs = em.createQuery("SELECT t FROM Transaction t join t.user u where u.userId = :userId", Transaction.class).setParameter("userId", userId).getResultList();
+			//TODO tambahin filter status khusus buyer
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {
@@ -37,7 +38,8 @@ public class TransactionDaoImpl extends GenericDaoImpl<Transaction> implements T
 	public List<Transaction> findTrxByMerchantId(long merchantId) {
 		List<Transaction> trxs = new ArrayList<Transaction>();
 		try {
-			trxs = em.createQuery("SELECT t FROM Transaction t join t.merchant m m.merchantId = :merchantId", Transaction.class).setParameter("merchantId", merchantId).getResultList();
+			trxs = em.createQuery("SELECT t FROM Transaction t join t.merchant m where m.merchantId = :merchantId", Transaction.class).setParameter("merchantId", merchantId).getResultList();
+			//TODO tambahin filter status khusus merchant
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {

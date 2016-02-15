@@ -3,7 +3,7 @@ package id.co.imwizz.bolpax.model.rest.request;
 public class TransactionTrailReq {
 	
 	private long trxId;
-	private long trxStatusId;
+	private long trxStatusMappingId;
 	
 	public long getTrxId() {
 		return trxId;
@@ -11,11 +11,11 @@ public class TransactionTrailReq {
 	public void setTrxId(long trxId) {
 		this.trxId = trxId;
 	}
-	public long getTrxStatusId() {
-		return trxStatusId;
+	public long getTrxStatusMappingId() {
+		return trxStatusMappingId;
 	}
-	public void setTrxStatusId(long trxStatusId) {
-		this.trxStatusId = trxStatusId;
+	public void setTrxStatusMappingId(long trxStatusMappingId) {
+		this.trxStatusMappingId = trxStatusMappingId;
 	}
 	
 	

@@ -8,11 +8,16 @@ import id.co.imwizz.bolpax.model.Issue;
 import id.co.imwizz.bolpax.model.IssueStatus;
 import id.co.imwizz.bolpax.model.IssueTrail;
 import id.co.imwizz.bolpax.model.Transaction;
+import id.co.imwizz.bolpax.model.TransactionTrail;
 import id.co.imwizz.bolpax.model.rest.request.IssueReq;
 import id.co.imwizz.bolpax.model.rest.request.IssueTrailReq;
+import id.co.imwizz.bolpax.model.rest.response.IssueDbRsp;
+import id.co.imwizz.bolpax.model.rest.response.IssueDetailDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDetailRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueTrailRsp;
+import id.co.imwizz.bolpax.model.rest.response.TransactionDbRsp;
+import id.co.imwizz.bolpax.model.rest.response.TransactionDetailDbRsp;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import java.util.ArrayList;
@@ -64,7 +69,7 @@ public class IssueController {
         	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
 		    String issueLastDate = null;
 		    while(itr.hasNext()) {
-		    	IssueTrail issueTrail =(IssueTrail) itr.next();
+		    	IssueTrail issueTrail = (IssueTrail) itr.next();
 		    	issueLastDate = issueTrail.getStsDate().toString();
 		    }
         	issueRsp.setIssueDate(issueLastDate);
@@ -173,6 +178,60 @@ public class IssueController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
+    @ResponseBody
+	public ResponseEntity<String> getAll() {
+		HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        
+        List<Issue> issues = issueDao.getAll();
+        List<IssueDbRsp> issueRsps = new ArrayList<IssueDbRsp>();
+        for (Issue issue : issues) {
+        	IssueDbRsp issueRsp = new IssueDbRsp();
+        	issueRsp.setBuyer(issue.getTrx().getUser().getFullname());
+        	issueRsp.setIssueTitle(issue.getSubject());
+        	issueRsp.setMerchant(issue.getTrx().getMerchant().getMerchantName());
+        	issueRsp.setReporterRole(issue.getReporterRole());
+        	issueRsp.setIssueId(issue.getIssueId());
+        	
+        	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+		    while(itr.hasNext()) {
+		    	IssueTrail issueTrail = (IssueTrail) itr.next();
+		    	issueRsp.setLastIssueDate(issueTrail.getStsDate().toString());
+	        	issueRsp.setLastIssueHistory(issueTrail.getIssueMessage());
+		    }
+        	
+        	issueRsps.add(issueRsp);
+		}
+		
+		return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueRsps), headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detailcomplete")
+    @ResponseBody
+	public ResponseEntity<String> getDetailCompelete(@RequestParam("issueid") long issueId) {
+		HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        
+        Issue issue = issueDao.get(issueId);
+        List<IssueDetailDbRsp> issueDetails = new ArrayList<IssueDetailDbRsp>();
+        
+        Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+        while(itr.hasNext()) {
+        	IssueTrail issueTrail = itr.next();
+        	IssueDetailDbRsp issueTrailRsp = new IssueDetailDbRsp();
+        	issueTrailRsp.setDate(issueTrail.getStsDate().toString());
+        	issueTrailRsp.setHistory(issueTrail.getIssueMessage());
+        	issueTrailRsp.setStatus(issueTrail.getIssueStatus().getStatus());
+        	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin());
+        	
+        	issueDetails.add(issueTrailRsp);
+        }
+        
+		
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueDetails), headers, HttpStatus.OK);
 	}
 	
 	private String getSuspect(Issue issue) {

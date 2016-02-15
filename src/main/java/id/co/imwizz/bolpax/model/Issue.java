@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -42,6 +43,7 @@ public class Issue {
 	private Transaction trx;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
+	@OrderBy("stsDate")
     private Set<IssueTrail> issueTrails;
 
 	public long getIssueId() {

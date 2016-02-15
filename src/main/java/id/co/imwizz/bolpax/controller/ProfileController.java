@@ -47,10 +47,13 @@ public class ProfileController {
 
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "user")
     @ResponseBody
-	public ResponseEntity<String> findUserById(@RequestParam("userid") String userid, @RequestParam("token") String token) {
+	public ResponseEntity<String> findUserById(@RequestParam("userid") long userid, @RequestParam("token") String token) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         User result = userDao.get(userid);
+        
+        //TODO list call inquiry balance API Mandiri
+        
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(result), headers, HttpStatus.OK);
 	}
 	
@@ -60,6 +63,9 @@ public class ProfileController {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         Merchant result = merchantDao.findMerchantByUserId(userId);
+        
+        //TODO list call inquiry balance API Mandiri
+        
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(result), headers, HttpStatus.OK);
 	}
 	

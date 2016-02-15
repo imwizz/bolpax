@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 @Entity
 @Table(name="trx_status")
 public class TransactionStatus {
@@ -26,19 +24,11 @@ public class TransactionStatus {
 	@Column(name = "status_desc", length = 200)
 	private String statusDesc;
 	
-	@Column(name = "role", length = 10)
-	private String role;
+	@OneToMany(mappedBy = "buyerTrxStatus")
+    private Set<TransactionStatusMapping> buyerTrxStatusMappings;
 	
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	@OneToMany(mappedBy = "trxStatus")
-    private Set<TransactionTrail> trxTrails;
+	@OneToMany(mappedBy = "merchantTrxStatus")
+    private Set<TransactionStatusMapping> merchantTrxStatusMappings;
 
 	public long getTrxStatusId() {
 		return trxStatusId;
@@ -63,15 +53,25 @@ public class TransactionStatus {
 	public void setStatusDesc(String statusDesc) {
 		this.statusDesc = statusDesc;
 	}
-
-	@JsonIgnore
-	public Set<TransactionTrail> getTrxTrails() {
-		return trxTrails;
+	
+	public Set<TransactionStatusMapping> getBuyerTrxStatusMappings() {
+		return buyerTrxStatusMappings;
 	}
 
-	public void setTrxTrails(Set<TransactionTrail> trxTrails) {
-		this.trxTrails = trxTrails;
+	public void setBuyerTrxStatusMappings(
+			Set<TransactionStatusMapping> buyerTrxStatusMappings) {
+		this.buyerTrxStatusMappings = buyerTrxStatusMappings;
 	}
+
+	public Set<TransactionStatusMapping> getMerchantTrxStatusMappings() {
+		return merchantTrxStatusMappings;
+	}
+
+	public void setMerchantTrxStatusMappings(
+			Set<TransactionStatusMapping> merchantTrxStatusMappings) {
+		this.merchantTrxStatusMappings = merchantTrxStatusMappings;
+	}
+
 	
 	
 }
