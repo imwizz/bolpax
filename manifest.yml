@@ -7,7 +7,6 @@ applications:
   host: bolpax
   disk_quota: 1024M
   services:
-  - ClearDB MySQL Database-ue
   - SQL Database-0f
   - mysql-ly
   - eCash API-nu
