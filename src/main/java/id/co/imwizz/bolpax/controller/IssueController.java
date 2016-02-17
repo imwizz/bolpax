@@ -8,7 +8,6 @@ import id.co.imwizz.bolpax.model.Issue;
 import id.co.imwizz.bolpax.model.IssueStatus;
 import id.co.imwizz.bolpax.model.IssueTrail;
 import id.co.imwizz.bolpax.model.Transaction;
-import id.co.imwizz.bolpax.model.TransactionTrail;
 import id.co.imwizz.bolpax.model.rest.request.IssueReq;
 import id.co.imwizz.bolpax.model.rest.request.IssueTrailReq;
 import id.co.imwizz.bolpax.model.rest.response.IssueDbRsp;
@@ -16,8 +15,6 @@ import id.co.imwizz.bolpax.model.rest.response.IssueDetailDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDetailRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueTrailRsp;
-import id.co.imwizz.bolpax.model.rest.response.TransactionDbRsp;
-import id.co.imwizz.bolpax.model.rest.response.TransactionDetailDbRsp;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import java.util.ArrayList;

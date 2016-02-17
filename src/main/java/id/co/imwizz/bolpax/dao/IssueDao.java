@@ -8,5 +8,6 @@ public interface IssueDao extends GenericDao<Issue>{
 
 	public List<Issue> findIssueByUserId (long userId);
 	public List<Issue> findIssueByMerchantId (long merchantId);
+	public Issue findIssueByTrxId (long trxId);
 	
 }

@@ -45,5 +45,18 @@ public class IssueDaoImpl extends GenericDaoImpl<Issue> implements IssueDao {
 		}
 		return issues;	
 	}
+
+	@Override
+	public Issue findIssueByTrxId(long trxId) {
+		Issue issue = new Issue();
+		try {
+			issue = em.createQuery("SELECT i FROM Issue i join i.trx t where t.trxId = :trxId", Issue.class).setParameter("trxId", trxId).getSingleResult();
+		} catch (NoResultException nre){
+
+		} catch (EmptyResultDataAccessException erdae) {
+			
+		}
+		return issue;	
+	}
 	
 }

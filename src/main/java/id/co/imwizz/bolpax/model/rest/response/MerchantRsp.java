@@ -2,20 +2,34 @@ package id.co.imwizz.bolpax.model.rest.response;
 
 public class MerchantRsp {
 	
-	private String name;
-	private long userid;
+	private String merchantName;
+	private long merchantId;
+	private UserRsp user;
 	
-	public String getName() {
-		return name;
+	public MerchantRsp() {}
+	
+	public MerchantRsp(String merchantName, long merchantId, UserRsp user) {
+		this.merchantName = merchantName;
+		this.merchantId = merchantId;
+		this.user = user;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public String getMerchantName() {
+		return merchantName;
 	}
-	public long getUserid() {
-		return userid;
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
-	public void setUserid(long userid) {
-		this.userid = userid;
+	public long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(long merchantId) {
+		this.merchantId = merchantId;
+	}
+	public UserRsp getUser() {
+		return user;
+	}
+	public void setUser(UserRsp user) {
+		this.user = user;
 	}
 
 }

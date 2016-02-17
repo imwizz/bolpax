@@ -26,13 +26,13 @@
     
     <!-- <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/GokeelDS"/> -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://pouGWkvvX8UOK@198.11.234.66:3307/de4b420bd437f44d7b56c6723d62bfd22" />
         <property name="username" value="uJw9mEnOmZzr2" />
-        <property name="password" value="pouGWkvvX8UOK" /> -->
-        <property name="url" value="jdbc:mysql://localhost:8889/bolpax_db" />
+        <property name="password" value="pouGWkvvX8UOK" />
+        <!-- <property name="url" value="jdbc:mysql://localhost:8889/bolpax_db" />
         <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="password" value="root" /> -->
     </bean>
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="persistenceUnitName" value="persistenceUnit"/>
@@ -49,6 +49,8 @@
          	</props>
       	</property>
     </bean>
+    
+    <bean class="org.springframework.web.client.RestTemplate" id="restTemplate"/>
     
     <!-- <bean class="id.co.imwizz.bolpax.dao.impl.GenericDaoImpl" id="genericDao" />
     <bean class="id.co.imwizz.bolpax.dao.impl.IssueDaoImpl" id="issueDao" />

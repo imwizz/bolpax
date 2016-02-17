@@ -1,9 +1,11 @@
 package id.co.imwizz.bolpax.model.rest.request;
 
+import java.util.List;
+
 public class TransactionTrailReq {
 	
 	private long trxId;
-	private long trxStatusMappingId;
+	private List<TransactionMappingStatusReq> trxStatusMapping;
 	
 	public long getTrxId() {
 		return trxId;
@@ -11,13 +13,11 @@ public class TransactionTrailReq {
 	public void setTrxId(long trxId) {
 		this.trxId = trxId;
 	}
-	public long getTrxStatusMappingId() {
-		return trxStatusMappingId;
+	public List<TransactionMappingStatusReq> getTrxStatusMapping() {
+		return trxStatusMapping;
 	}
-	public void setTrxStatusMappingId(long trxStatusMappingId) {
-		this.trxStatusMappingId = trxStatusMappingId;
+	public void setTrxStatusMapping(List<TransactionMappingStatusReq> trxStatusMapping) {
+		this.trxStatusMapping = trxStatusMapping;
 	}
-	
-	
 
 }

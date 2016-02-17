@@ -22,7 +22,7 @@ public class MerchantDaoImpl extends GenericDaoImpl<Merchant> implements Merchan
 
 	@Override
 	public Merchant findMerchantByUserId(long userId) {
-		Merchant merchant = new Merchant();
+		Merchant merchant = null;
 		try {
 //			Object[] result = em.createQuery("SELECT m.merchantId, m.merchantName FROM Merchant m join m.user u where u.userId = :userId", Object[].class).setParameter("userId", userId).getSingleResult();
 //		    merchant.setMerchantId((long) result[0]);
@@ -38,16 +38,18 @@ public class MerchantDaoImpl extends GenericDaoImpl<Merchant> implements Merchan
 
 	@Override
 	public List<Merchant> findMerchantsExceptMe(long userId) {
-		List<Merchant> merchants = new ArrayList<Merchant>();
+		List<Merchant> merchants = null;
 		try {
 			List<Object[]> result = em.createQuery("SELECT m.merchantId, m.merchantName FROM Merchant m join m.user u where u.userId <> :userId", Object[].class).setParameter("userId", userId).getResultList();
-		    for (Object[] objects : result) {
-		    	Merchant merchant = new Merchant();
-		    	merchant.setMerchantId((long) objects[0]);
-			    merchant.setMerchantName((String) objects[1]);
-			    merchants.add(merchant);
-			}
-			
+		    if(result.size() > 0) {
+		    	merchants = new ArrayList<Merchant>();
+		    	for (Object[] objects : result) {
+			    	Merchant merchant = new Merchant();
+			    	merchant.setMerchantId((long) objects[0]);
+				    merchant.setMerchantName((String) objects[1]);
+				    merchants.add(merchant);
+				}
+		    }
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {

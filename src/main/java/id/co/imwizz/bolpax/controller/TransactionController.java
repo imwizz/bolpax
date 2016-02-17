@@ -1,18 +1,26 @@
 package id.co.imwizz.bolpax.controller;
 
+import id.co.imwizz.bolpax.dao.IssueDao;
+import id.co.imwizz.bolpax.dao.IssueStatusDao;
+import id.co.imwizz.bolpax.dao.IssueTrailDao;
 import id.co.imwizz.bolpax.dao.MerchantDao;
 import id.co.imwizz.bolpax.dao.TransactionDao;
 import id.co.imwizz.bolpax.dao.TransactionStatusDao;
 import id.co.imwizz.bolpax.dao.TransactionStatusMappingDao;
 import id.co.imwizz.bolpax.dao.TransactionTrailDao;
 import id.co.imwizz.bolpax.dao.UserDao;
+import id.co.imwizz.bolpax.mandiri.client.MandiriService;
+import id.co.imwizz.bolpax.mandiri.model.rest.response.LoginMandiriRsp;
+import id.co.imwizz.bolpax.mandiri.model.rest.response.TransferRsp;
 import id.co.imwizz.bolpax.model.Issue;
+import id.co.imwizz.bolpax.model.IssueStatus;
 import id.co.imwizz.bolpax.model.IssueTrail;
 import id.co.imwizz.bolpax.model.Merchant;
 import id.co.imwizz.bolpax.model.Transaction;
 import id.co.imwizz.bolpax.model.TransactionStatusMapping;
 import id.co.imwizz.bolpax.model.TransactionTrail;
 import id.co.imwizz.bolpax.model.User;
+import id.co.imwizz.bolpax.model.rest.request.TransactionMappingStatusReq;
 import id.co.imwizz.bolpax.model.rest.request.TransactionReq;
 import id.co.imwizz.bolpax.model.rest.request.TransactionTrailReq;
 import id.co.imwizz.bolpax.model.rest.request.TransferReq;
@@ -60,6 +68,18 @@ public class TransactionController {
 	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
+	private IssueDao issueDao;
+	
+	@Autowired
+	private IssueTrailDao issueTrailDao;
+	
+	@Autowired 
+	private IssueStatusDao issueStatusDao;
+	
+	@Autowired
+	private MandiriService mandiriService;
+	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbybuyer")
     @ResponseBody
 	public ResponseEntity<String> getListByBuyer(@RequestParam("userid") long userid) {
@@ -67,29 +87,32 @@ public class TransactionController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         
         List<Transaction> trxs = trxDao.findTrxByUserId(userid);
-        List<TransactionRsp> trxRsps = new ArrayList<TransactionRsp>();
+        List<TransactionRsp> trxRsps = null;
         
-        for (Transaction trx : trxs) {
-			TransactionRsp trxRsp = new TransactionRsp();
-			trxRsp.setTrxId(trx.getTrxId());
-			trxRsp.setAmount(trx.getAmount());
-			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
-			trxRsp.setProduct(trx.getProductName());
-			
-			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
-		    String trxLastDate = null;
-		    String trxLastStatus = null;
-		    while(itr.hasNext()) {
-		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
-		    	trxLastDate = trxTrail.getStsDate().toString();
-		    	trxLastStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
-		    }
-			
-			trxRsp.setTrxDate(trxLastDate); 
-			trxRsp.setTrxLastStatus(trxLastStatus); 
-			
-			trxRsps.add(trxRsp);
-		}
+        if(trxs.size() > 0) {
+        	trxRsps = new ArrayList<TransactionRsp>();
+        	for (Transaction trx : trxs) {
+    			TransactionRsp trxRsp = new TransactionRsp();
+    			trxRsp.setTrxId(trx.getTrxId());
+    			trxRsp.setAmount(trx.getAmount());
+    			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
+    			trxRsp.setProduct(trx.getProductName());
+    			
+    			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
+    		    String trxLastDate = null;
+    		    String trxLastStatus = null;
+    		    while(itr.hasNext()) {
+    		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
+    		    	trxLastDate = trxTrail.getStsDate().toString();
+    		    	trxLastStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
+    		    }
+    			
+    			trxRsp.setTrxDate(trxLastDate); 
+    			trxRsp.setTrxLastStatus(trxLastStatus); 
+    			
+    			trxRsps.add(trxRsp);
+    		}
+        }
         
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
@@ -101,29 +124,32 @@ public class TransactionController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         
         List<Transaction> trxs = trxDao.findTrxByMerchantId(merchantId);
-        List<TransactionRsp> trxRsps = new ArrayList<TransactionRsp>();
+        List<TransactionRsp> trxRsps = null;
         
-        for (Transaction trx : trxs) {
-			TransactionRsp trxRsp = new TransactionRsp();
-			trxRsp.setTrxId(trx.getTrxId());
-			trxRsp.setAmount(trx.getAmount());
-			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
-			trxRsp.setProduct(trx.getProductName());
-			
-			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
-		    String trxLastDate = null;
-		    String trxLastStatus = null;
-		    while(itr.hasNext()) {
-		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
-		    	trxLastDate = trxTrail.getStsDate().toString();
-		    	trxLastStatus = trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus();
-		    }
-			
-			trxRsp.setTrxDate(trxLastDate); 
-			trxRsp.setTrxLastStatus(trxLastStatus); 
-			
-			trxRsps.add(trxRsp);
-		}
+        if(trxs.size() > 0) {
+        	trxRsps = new ArrayList<TransactionRsp>();
+        	for (Transaction trx : trxs) {
+    			TransactionRsp trxRsp = new TransactionRsp();
+    			trxRsp.setTrxId(trx.getTrxId());
+    			trxRsp.setAmount(trx.getAmount());
+    			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
+    			trxRsp.setProduct(trx.getProductName());
+    			
+    			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
+    		    String trxLastDate = null;
+    		    String trxLastStatus = null;
+    		    while(itr.hasNext()) {
+    		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
+    		    	trxLastDate = trxTrail.getStsDate().toString();
+    		    	trxLastStatus = trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus();
+    		    }
+    			
+    			trxRsp.setTrxDate(trxLastDate); 
+    			trxRsp.setTrxLastStatus(trxLastStatus); 
+    			
+    			trxRsps.add(trxRsp);
+    		}
+        }
         
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
@@ -174,26 +200,36 @@ public class TransactionController {
 		JsonMapper<TransactionReq> jMapper = new JsonMapper<TransactionReq>(TransactionReq.class);
 		TransactionReq trxRs = jMapper.fromJsonToObject(json);
 		
-		//TODO list call transfer API Mandiri
-		
 		Double amt = trxRs.getAmount();
 		Merchant merchant = merchantDao.get(trxRs.getMerchantId());
 		User user = userDao.get(trxRs.getUserId());
 		String prod = trxRs.getProduct();
 		
-		//insert into transaction
+		User userAdmin = userDao.get(Long.valueOf(99));
+
+		// create new transaction
 		Transaction trx = new Transaction(prod, amt, user, merchant);
 		trxDao.persist(trx);
-		
-		//insert into transaction_trail
-//		TransactionStatus trxStatus = trxStatusDao.get(Long.valueOf("1"));
+
+		// insert into transaction_trail initiate payment
 		TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("1"));
 		TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
 		trxTrailDao.persist(trxTrail);
+
+		//transfer to pool account
+		TransferRsp transfer = mandiriService.doTransfer(user.getPhone(), userAdmin.getPhone(), amt.toString(), trxRs.getProduct(), user.getPassword(), trxRs.getToken());
 		
-        HttpHeaders headers = new HttpHeaders();
+		//insert into transaction_trail payment completed by buyer
+		if(transfer.getStatus().equals("PROCESSED")) {
+			//insert into transaction_trail
+			trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("2"));
+			trxTrail = new TransactionTrail(trx, trxStatusMapping);
+			trxTrailDao.persist(trxTrail);
+		}
+		
+		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "insertTrail")
@@ -201,14 +237,16 @@ public class TransactionController {
 		JsonMapper<TransactionTrailReq> jMapper = new JsonMapper<TransactionTrailReq>(TransactionTrailReq.class);
 		TransactionTrailReq trxTrailRS = jMapper.fromJsonToObject(json);
 		
-		Transaction trx = trxDao.get(trxTrailRS.getTrxId());
-//		TransactionStatus trxStatus = trxStatusDao.get(trxTrailRS.getTrxStatusId());
-		TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(trxTrailRS.getTrxStatusMappingId());
-		
-		//insert into transaction_trail
-		TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
-		
-		trxTrailDao.persist(trxTrail);
+		List<TransactionMappingStatusReq> trxStatusMappingReqs = trxTrailRS.getTrxStatusMapping();
+		for (TransactionMappingStatusReq trxMappingStatusReq : trxStatusMappingReqs) {
+			Transaction trx = trxDao.get(trxTrailRS.getTrxId());
+			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(trxMappingStatusReq.getId());
+			
+			//insert into transaction_trail
+			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
+			
+			trxTrailDao.persist(trxTrail);
+		}
 		
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -285,15 +323,49 @@ public class TransactionController {
 		JsonMapper<TransferReq> jMapper = new JsonMapper<TransferReq>(TransferReq.class);
 		TransferReq transferReq = jMapper.fromJsonToObject(json);
 		
-		//TODO list call transfer API Mandiri
-		
 		long trxId = transferReq.getTrxId();
 		String refund = transferReq.getRefund();
-		String token = transferReq.getToken();
+		
+		Transaction trx = trxDao.get(trxId);
+		
+		User userAdmin = userDao.get(Long.valueOf(99));
+		LoginMandiriRsp loginMandiri = mandiriService.doLogin(userAdmin.getPhone(), userAdmin.getPassword());
+		
+		String destination = null;
+		TransferRsp transfer = null;
+		if(refund.equalsIgnoreCase("Y")) {
+			destination = trx.getUser().getPhone();
+			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
+			
+			//transaction changed to cancelled
+			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("7"));
+			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
+			trxTrailDao.persist(trxTrail);
+			
+			//issue changed to refund
+			Issue issue = issueDao.findIssueByTrxId(trxId);
+			IssueStatus issueRefund = issueStatusDao.get(Long.valueOf(5));
+			IssueTrail issueTrailRefund = new IssueTrail(Character.valueOf('Y'), "Proses refund telah dilakukan", issue, issueRefund);
+			issueTrailDao.persist(issueTrailRefund);
+			
+			//issue changed to closed
+			IssueStatus issueClosed = issueStatusDao.get(Long.valueOf(6));
+			IssueTrail issueTrailClosed = new IssueTrail(Character.valueOf('Y'), "Closed", issue, issueClosed);
+			issueTrailDao.persist(issueTrailClosed);
+		} else {
+			destination = trx.getMerchant().getUser().getPhone();
+			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
+			
+			//transaction changed to completed
+			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("6"));
+			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
+			trxTrailDao.persist(trxTrail);
+		}
+		
 		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
 	
 	private boolean isRefund(Transaction trx) {
