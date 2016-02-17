@@ -1,5 +1,5 @@
 applications:
-- path: target/JavaHelloWorldApp.war
+- path: target/bolpax-backend-1.0.0-SNAPSHOT.war
   memory: 512M
   instances: 1
   domain: mybluemix.net
