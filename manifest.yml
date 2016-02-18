@@ -1,12 +1,11 @@
 applications:
 - path: target/bolpax-backend-1.0.0-SNAPSHOT.war
-  memory: 512M
+  memory: 1024M
   instances: 1
   domain: mybluemix.net
   name: bolpax
   host: bolpax
   disk_quota: 1024M
   services:
-  - SQL Database-0f
   - mysql-ly
   - eCash API-nu
