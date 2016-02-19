@@ -2,6 +2,7 @@ package id.co.imwizz.bolpax.mandiri.model.rest.response;
 
 public class TransferRsp extends BaseRsp {
 
+	private long trxId;
 	private String toAccount;
 	private String fromAccount;
 	private String amount;
@@ -30,6 +31,12 @@ public class TransferRsp extends BaseRsp {
 	}
 	public void setTrxDate(String trxDate) {
 		this.trxDate = trxDate;
+	}
+	public long getTrxId() {
+		return trxId;
+	}
+	public void setTrxId(long trxId) {
+		this.trxId = trxId;
 	}
 	
 	

@@ -218,6 +218,7 @@ public class TransactionController {
 
 		//transfer to pool account
 		TransferRsp transfer = mandiriService.doTransfer(user.getPhone(), userAdmin.getPhone(), amt.toString(), trxRs.getProduct(), user.getPassword(), trxRs.getToken());
+		transfer.setTrxId(trx.getTrxId());
 		
 		//insert into transaction_trail payment completed by buyer
 		if(transfer.getStatus().equals("PROCESSED")) {
