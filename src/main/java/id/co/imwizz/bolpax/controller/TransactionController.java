@@ -249,6 +249,20 @@ public class TransactionController {
 			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
 			
 			trxTrailDao.persist(trxTrail);
+			
+			if(trxMappingStatusReq.getId() == 6) {
+				User userAdmin = userDao.get(Long.valueOf(99));
+				LoginMandiriRsp loginMandiri = mandiriService.doLogin(userAdmin.getPhone(), userAdmin.getPassword());
+				
+				String destination = trx.getMerchant().getUser().getPhone();
+				TransferRsp transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
+				
+				//transaction changed to completed
+				TransactionTrail trxTrailTransfer = new TransactionTrail(trx, trxStatusMapping);
+				trxTrailDao.persist(trxTrailTransfer);
+				
+				System.out.println(JsonMapper.fromObjectToJson(transfer));
+			}
 		}
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -321,13 +335,13 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trxDetails), headers, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "transfer")
+	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "refund")
 	public ResponseEntity<String> doTransfer(@RequestBody String json) {
 		JsonMapper<TransferReq> jMapper = new JsonMapper<TransferReq>(TransferReq.class);
 		TransferReq transferReq = jMapper.fromJsonToObject(json);
 		
 		long trxId = transferReq.getTrxId();
-		String refund = transferReq.getRefund();
+//		String refund = transferReq.getRefund();
 		
 		Transaction trx = trxDao.get(trxId);
 		
@@ -336,12 +350,12 @@ public class TransactionController {
 		
 		String destination = null;
 		TransferRsp transfer = null;
-		if(refund.equalsIgnoreCase("Y")) {
+//		if(refund.equalsIgnoreCase("Y")) {
 			destination = trx.getUser().getPhone();
 			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
 			
 			//transaction changed to cancelled
-			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("7"));
+			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf(7));
 			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
 			trxTrailDao.persist(trxTrail);
 			
@@ -355,15 +369,15 @@ public class TransactionController {
 			IssueStatus issueClosed = issueStatusDao.get(Long.valueOf(6));
 			IssueTrail issueTrailClosed = new IssueTrail(Character.valueOf('Y'), "Closed", issue, issueClosed);
 			issueTrailDao.persist(issueTrailClosed);
-		} else {
-			destination = trx.getMerchant().getUser().getPhone();
-			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
-			
-			//transaction changed to completed
-			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("6"));
-			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
-			trxTrailDao.persist(trxTrail);
-		}
+//		} else {
+//			destination = trx.getMerchant().getUser().getPhone();
+//			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
+//			
+//			//transaction changed to completed
+//			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("6"));
+//			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
+//			trxTrailDao.persist(trxTrail);
+//		}
 		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
