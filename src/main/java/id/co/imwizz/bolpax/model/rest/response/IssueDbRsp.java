@@ -3,6 +3,7 @@ package id.co.imwizz.bolpax.model.rest.response;
 public class IssueDbRsp {
 	
 	private long issueId;
+	private long trxId;
 	private String buyer;
 	private String merchant;
 	private String reporterRole;
@@ -58,6 +59,12 @@ public class IssueDbRsp {
 	}
 	public void setReporterRole(String reporterRole) {
 		this.reporterRole = reporterRole;
+	}
+	public long getTrxId() {
+		return trxId;
+	}
+	public void setTrxId(long trxId) {
+		this.trxId = trxId;
 	}
 
 }

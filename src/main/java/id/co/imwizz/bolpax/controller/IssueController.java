@@ -195,6 +195,7 @@ public class IssueController {
         	issueRsp.setMerchant(issue.getTrx().getMerchant().getMerchantName());
         	issueRsp.setReporterRole(issue.getReporterRole());
         	issueRsp.setIssueId(issue.getIssueId());
+        	issueRsp.setTrxId(issue.getTrx().getTrxId());
         	
         	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
 		    while(itr.hasNext()) {
