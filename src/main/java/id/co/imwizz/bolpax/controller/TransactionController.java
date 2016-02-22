@@ -363,9 +363,9 @@ public class TransactionController {
 			trxTrailDao.persist(trxTrail);
 		}
 		
-		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
 	
@@ -374,7 +374,7 @@ public class TransactionController {
     	while(itrIssue.hasNext()) {
     		Issue issue = itrIssue.next();
     		Iterator<IssueTrail> itrIssueTrail = issue.getIssueTrails().iterator();
-    		while(itrIssue.hasNext()) {
+    		while(itrIssueTrail.hasNext()) {
     			IssueTrail issueTrail = itrIssueTrail.next();
     			String refund = issueTrail.getIssueStatus().getStatus();
     			

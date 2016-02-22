@@ -1,11 +1,10 @@
 package id.co.imwizz.bolpax.controller;
 
+import id.co.imwizz.bolpax.model.ErrorInfo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import id.co.imwizz.bolpax.model.ErrorInfo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,29 +31,22 @@ public class GlobalControllerExceptionHandler {
 		ex.printStackTrace();
 		return errorInfo;
 	}
-	
-	private String getBody(HttpServletRequest request) {
-		BufferedReader bufferedReader = null;
-		StringBuilder stringBuilder = new StringBuilder();
 
+	private String getBody(HttpServletRequest request) {
+		StringBuilder stringBuilder = new StringBuilder();
+		BufferedReader reader = null;
+		
 		try {
-			InputStream inputStream = request.getInputStream();
-			if (inputStream != null) {
-				bufferedReader = new BufferedReader(new InputStreamReader(
-						inputStream));
-				char[] charBuffer = new char[128];
-				int bytesRead = -1;
-				while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-					stringBuilder.append(charBuffer, 0, bytesRead);
-				}
-			} else {
-				stringBuilder.append("");
-			}
+			reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			String line;
+		    while ((line = reader.readLine()) != null) {
+		    	stringBuilder.append(line);
+		    }
 		} catch (IOException ex) {
 		} finally {
-			if (bufferedReader != null) {
+			if (reader != null) {
 				try {
-					bufferedReader.close();
+					reader.close();
 				} catch (IOException ex) {
 				}
 			}
