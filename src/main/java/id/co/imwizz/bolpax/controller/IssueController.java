@@ -201,6 +201,7 @@ public class IssueController {
 		    	IssueTrail issueTrail = (IssueTrail) itr.next();
 		    	issueRsp.setLastIssueDate(issueTrail.getStsDate().toString());
 	        	issueRsp.setLastIssueHistory(issueTrail.getIssueMessage());
+	        	issueRsp.setLastStatus(issueTrail.getIssueStatus().getStatus());
 		    }
         	
         	issueRsps.add(issueRsp);

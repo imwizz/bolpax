@@ -340,10 +340,13 @@ public class TransactionController {
 		JsonMapper<TransferReq> jMapper = new JsonMapper<TransferReq>(TransferReq.class);
 		TransferReq transferReq = jMapper.fromJsonToObject(json);
 		
-		long trxId = transferReq.getTrxId();
+//		long trxId = transferReq.getTrxId();
 //		String refund = transferReq.getRefund();
 		
-		Transaction trx = trxDao.get(trxId);
+		long issueId = transferReq.getIssueId();
+		
+		Issue issue = issueDao.get(issueId);
+		Transaction trx = issue.getTrx();
 		
 		User userAdmin = userDao.get(Long.valueOf(99));
 		LoginMandiriRsp loginMandiri = mandiriService.doLogin(userAdmin.getPhone(), userAdmin.getPassword());
@@ -360,7 +363,7 @@ public class TransactionController {
 			trxTrailDao.persist(trxTrail);
 			
 			//issue changed to refund
-			Issue issue = issueDao.findIssueByTrxId(trxId);
+//			Issue issue = issueDao.findIssueByTrxId(trxId);
 			IssueStatus issueRefund = issueStatusDao.get(Long.valueOf(5));
 			IssueTrail issueTrailRefund = new IssueTrail(Character.valueOf('Y'), "Proses refund telah dilakukan", issue, issueRefund);
 			issueTrailDao.persist(issueTrailRefund);

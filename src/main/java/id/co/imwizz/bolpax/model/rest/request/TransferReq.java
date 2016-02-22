@@ -5,6 +5,7 @@ public class TransferReq {
 	private long trxId;
 	private String refund;
 	private String token;
+	private long issueId;
 	
 	public long getTrxId() {
 		return trxId;
@@ -23,6 +24,12 @@ public class TransferReq {
 	}
 	public void setToken(String token) {
 		this.token = token;
+	}
+	public long getIssueId() {
+		return issueId;
+	}
+	public void setIssueId(long issueId) {
+		this.issueId = issueId;
 	}
 
 }
