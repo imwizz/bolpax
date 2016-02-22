@@ -118,12 +118,14 @@ public class IssueController {
         issueRsp.setSuspect(getSuspect(issue));
         issueRsp.setAmount(issue.getTrx().getAmount());
         issueRsp.setProduct(issue.getTrx().getProductName());
-        issueRsp.setIssueLastStatus(issue.getSubject());
+        issueRsp.setSubject(issue.getSubject());
         
         List<IssueTrailRsp> issueTrailRsps = new ArrayList<IssueTrailRsp>();
         Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
+        String lastStatus = null;
         while(itr.hasNext()) {
         	IssueTrail issueTrail = itr.next();
+        	lastStatus = issueTrail.getIssueStatus().getStatus();
         	IssueTrailRsp issueTrailRsp = new IssueTrailRsp();
         	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin().toString());
         	issueTrailRsp.setMessage(issueTrail.getIssueMessage());
@@ -131,6 +133,7 @@ public class IssueController {
         	issueTrailRsps.add(issueTrailRsp);
         }
         
+        issueRsp.setIssueLastStatus(lastStatus);
         issueRsp.setIssueHistory(issueTrailRsps);
         
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueRsp), headers, HttpStatus.OK);

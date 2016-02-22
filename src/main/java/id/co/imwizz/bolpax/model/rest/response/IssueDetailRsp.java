@@ -6,6 +6,7 @@ public class IssueDetailRsp {
 	
 	private String suspect;
 	private String issueLastStatus;
+	private String subject;
 	private Double amount;
 	private String product;
 	private List<IssueTrailRsp> issueHistory;
@@ -39,6 +40,12 @@ public class IssueDetailRsp {
 	}
 	public void setProduct(String product) {
 		this.product = product;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 }
