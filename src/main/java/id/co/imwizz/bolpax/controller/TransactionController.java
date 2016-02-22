@@ -103,8 +103,10 @@ public class TransactionController {
     		    String trxLastStatus = null;
     		    while(itr.hasNext()) {
     		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
-    		    	trxLastDate = trxTrail.getStsDate().toString();
-    		    	trxLastStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
+    		    	if(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus() != null) {
+    		    		trxLastDate = trxTrail.getStsDate().toString();
+        		    	trxLastStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
+    		    	}
     		    }
     			
     			trxRsp.setTrxDate(trxLastDate); 
