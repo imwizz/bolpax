@@ -25,14 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@CrossOrigin
+@RestController
 @RequestMapping("/issue")
 public class IssueController {
 	
@@ -185,6 +187,10 @@ public class IssueController {
 	public ResponseEntity<String> getAll() {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        headers.add("Access-Control-Allow-Origin", "*");
+//		headers.add("Access-Control-Allow-Origin", "http://localhost:3000"); //allows CORS requests only coming from podcastpedia.org		
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
+//		headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");
         
         List<Issue> issues = issueDao.getAll();
         List<IssueDbRsp> issueRsps = new ArrayList<IssueDbRsp>();
