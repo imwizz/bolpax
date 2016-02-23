@@ -186,9 +186,7 @@ public class IssueController {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         headers.add("Access-Control-Allow-Origin", "*");
-//		headers.add("Access-Control-Allow-Origin", "http://localhost:3000"); //allows CORS requests only coming from podcastpedia.org		
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
-//		headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");
         
         List<Issue> issues = issueDao.getAll();
         List<IssueDbRsp> issueRsps = new ArrayList<IssueDbRsp>();
@@ -220,6 +218,8 @@ public class IssueController {
 	public ResponseEntity<String> getDetailCompelete(@RequestParam("issueid") long issueId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");	
         
         Issue issue = issueDao.get(issueId);
         List<IssueDetailDbRsp> issueDetails = new ArrayList<IssueDetailDbRsp>();

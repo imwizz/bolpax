@@ -275,6 +275,8 @@ public class TransactionController {
 	public ResponseEntity<String> getAll() {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");	
         
         List<Transaction> trxs = trxDao.getAll();
         List<TransactionDbRsp> trxRsps = new ArrayList<TransactionDbRsp>();
@@ -315,6 +317,8 @@ public class TransactionController {
 	public ResponseEntity<String> getDetailCompelete(@RequestParam("trxid") long trxId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");	
         
         Transaction trx = trxDao.get(trxId);
         List<TransactionDetailDbRsp> trxDetails = new ArrayList<TransactionDetailDbRsp>();
@@ -340,9 +344,6 @@ public class TransactionController {
 		JsonMapper<TransferReq> jMapper = new JsonMapper<TransferReq>(TransferReq.class);
 		TransferReq transferReq = jMapper.fromJsonToObject(json);
 		
-//		long trxId = transferReq.getTrxId();
-//		String refund = transferReq.getRefund();
-		
 		long issueId = transferReq.getIssueId();
 		
 		Issue issue = issueDao.get(issueId);
@@ -353,37 +354,33 @@ public class TransactionController {
 		
 		String destination = null;
 		TransferRsp transfer = null;
-//		if(refund.equalsIgnoreCase("Y")) {
-			destination = trx.getUser().getPhone();
-			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
-			
-			//transaction changed to cancelled
-			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf(7));
-			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
-			trxTrailDao.persist(trxTrail);
-			
-			//issue changed to refund
-//			Issue issue = issueDao.findIssueByTrxId(trxId);
-			IssueStatus issueRefund = issueStatusDao.get(Long.valueOf(5));
-			IssueTrail issueTrailRefund = new IssueTrail(Character.valueOf('Y'), "Proses refund telah dilakukan", issue, issueRefund);
-			issueTrailDao.persist(issueTrailRefund);
-			
-			//issue changed to closed
-			IssueStatus issueClosed = issueStatusDao.get(Long.valueOf(6));
-			IssueTrail issueTrailClosed = new IssueTrail(Character.valueOf('Y'), "Closed", issue, issueClosed);
-			issueTrailDao.persist(issueTrailClosed);
-//		} else {
-//			destination = trx.getMerchant().getUser().getPhone();
-//			transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination, trx.getAmount().toString(), trx.getProductName(), userAdmin.getPassword(), loginMandiri.getToken());
-//			
-//			//transaction changed to completed
-//			TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf("6"));
-//			TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
-//			trxTrailDao.persist(trxTrail);
-//		}
+		
+		destination = trx.getUser().getPhone();
+		transfer = mandiriService.doTransfer(userAdmin.getPhone(), destination,
+				trx.getAmount().toString(), trx.getProductName(),
+				userAdmin.getPassword(), loginMandiri.getToken());
+
+		// transaction changed to cancelled
+		TransactionStatusMapping trxStatusMapping = trxStatusMappingDao.get(Long.valueOf(7));
+		TransactionTrail trxTrail = new TransactionTrail(trx, trxStatusMapping);
+		trxTrailDao.persist(trxTrail);
+
+		// issue changed to refund
+		// Issue issue = issueDao.findIssueByTrxId(trxId);
+		IssueStatus issueRefund = issueStatusDao.get(Long.valueOf(5));
+		IssueTrail issueTrailRefund = new IssueTrail(Character.valueOf('Y'),
+				"Proses refund telah dilakukan", issue, issueRefund);
+		issueTrailDao.persist(issueTrailRefund);
+
+		// issue changed to closed
+		IssueStatus issueClosed = issueStatusDao.get(Long.valueOf(6));
+		IssueTrail issueTrailClosed = new IssueTrail(Character.valueOf('Y'), "Closed", issue, issueClosed);
+		issueTrailDao.persist(issueTrailClosed);
 		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");	
         
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
