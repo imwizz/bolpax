@@ -314,7 +314,7 @@ public class TransactionController {
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detailcomplete")
     @ResponseBody
-	public ResponseEntity<String> getDetailCompelete(@RequestParam("trxid") long trxId) {
+	public ResponseEntity<String> getDetailCompelete(@RequestParam("trxId") long trxId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         headers.add("Access-Control-Allow-Origin", "*");

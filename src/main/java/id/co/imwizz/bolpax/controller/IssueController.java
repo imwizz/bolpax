@@ -218,7 +218,7 @@ public class IssueController {
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detailcomplete")
     @ResponseBody
-	public ResponseEntity<String> getDetailCompelete(@RequestParam("issueid") long issueId) {
+	public ResponseEntity<String> getDetailCompelete(@RequestParam("issueId") long issueId) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         headers.add("Access-Control-Allow-Origin", "*");
