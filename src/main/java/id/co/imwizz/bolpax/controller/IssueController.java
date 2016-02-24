@@ -10,6 +10,7 @@ import id.co.imwizz.bolpax.model.IssueTrail;
 import id.co.imwizz.bolpax.model.Transaction;
 import id.co.imwizz.bolpax.model.rest.request.IssueReq;
 import id.co.imwizz.bolpax.model.rest.request.IssueTrailReq;
+import id.co.imwizz.bolpax.model.rest.response.IssueCreationRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDetailDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDetailRsp;
@@ -157,9 +158,11 @@ public class IssueController {
 		IssueTrail issueTrail = new IssueTrail(fromAdmin, issueMessage, issue, issueStatus);
 		issueTrailDao.persist(issueTrail);
 		
+		IssueCreationRsp issueCreation = new IssueCreationRsp(issue.getIssueId(), "SUCCESS");
+		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueCreation), headers, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "insertTrail")
