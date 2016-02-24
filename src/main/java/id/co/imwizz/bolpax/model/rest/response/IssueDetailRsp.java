@@ -9,6 +9,7 @@ public class IssueDetailRsp {
 	private String subject;
 	private Double amount;
 	private String product;
+	private String reporter;
 	private List<IssueTrailRsp> issueHistory;
 	
 	public String getSuspect() {
@@ -46,6 +47,12 @@ public class IssueDetailRsp {
 	}
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+	public String getReporter() {
+		return reporter;
+	}
+	public void setReporter(String reporter) {
+		this.reporter = reporter;
 	}
 
 }

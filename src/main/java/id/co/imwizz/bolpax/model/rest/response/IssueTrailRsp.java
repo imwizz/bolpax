@@ -6,6 +6,7 @@ public class IssueTrailRsp {
 	private String fromAdmin;
 	private String time;
 	private String message;
+	private String issueStatus;
 	
 	public String getFromAdmin() {
 		return fromAdmin;
@@ -25,7 +26,11 @@ public class IssueTrailRsp {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+	public String getIssueStatus() {
+		return issueStatus;
+	}
+	public void setIssueStatus(String issueStatus) {
+		this.issueStatus = issueStatus;
+	}
 
 }

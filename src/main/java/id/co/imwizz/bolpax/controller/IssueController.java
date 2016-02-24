@@ -120,6 +120,7 @@ public class IssueController {
         issueRsp.setAmount(issue.getTrx().getAmount());
         issueRsp.setProduct(issue.getTrx().getProductName());
         issueRsp.setSubject(issue.getSubject());
+        issueRsp.setReporter(issue.getReporterRole());
         
         List<IssueTrailRsp> issueTrailRsps = new ArrayList<IssueTrailRsp>();
         Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
@@ -131,6 +132,7 @@ public class IssueController {
         	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin().toString());
         	issueTrailRsp.setMessage(issueTrail.getIssueMessage());
         	issueTrailRsp.setTime(issueTrail.getStsDate().toString());
+        	issueTrailRsp.setIssueStatus(issueTrail.getIssueStatus().getStatus());
         	issueTrailRsps.add(issueTrailRsp);
         }
         
