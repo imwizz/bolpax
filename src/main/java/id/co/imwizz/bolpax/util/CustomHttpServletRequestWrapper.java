@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-    private final Logger logger = Logger.getLogger(CustomHttpServletRequestWrapper.class);
+    private static final Logger logger = Logger.getLogger(CustomHttpServletRequestWrapper.class);
     private final String body;
 
     public CustomHttpServletRequestWrapper(HttpServletRequest request) {
