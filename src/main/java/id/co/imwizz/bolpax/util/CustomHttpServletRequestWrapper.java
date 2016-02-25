@@ -33,7 +33,7 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
                     stringBuilder.append(line).append("\n");
                 }
             } else {
-                stringBuilder.append("");
+                stringBuilder.append("no body");
             }
         } catch (IOException ex) {
             logger.error("Error reading the request body...");
@@ -48,6 +48,8 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
         }
 
         body = stringBuilder.toString();
+        String uri = request.getRequestURI();
+        logger.info("\nURI = " + uri + "\nResponse body = " + body);
     }
 
     @Override

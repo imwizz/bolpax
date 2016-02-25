@@ -185,7 +185,7 @@ public class IssueController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         headers.add("Access-Control-Allow-Origin", "*");
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
