@@ -29,6 +29,7 @@ import id.co.imwizz.bolpax.model.rest.response.TransactionDetailDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.TransactionDetailRsp;
 import id.co.imwizz.bolpax.model.rest.response.TransactionRsp;
 import id.co.imwizz.bolpax.model.rest.response.TransactionTrailRsp;
+import id.co.imwizz.bolpax.util.DateConverter;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class TransactionController {
     		    while(itr.hasNext()) {
     		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
     		    	if(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus() != null) {
-    		    		trxLastDate = trxTrail.getStsDate().toString();
+    		    		trxLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, trxTrail.getStsDate());
         		    	trxLastStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
     		    	}
     		    }
@@ -135,6 +136,7 @@ public class TransactionController {
     			trxRsp.setTrxId(trx.getTrxId());
     			trxRsp.setAmount(trx.getAmount());
     			trxRsp.setMerchant(trx.getMerchant().getMerchantName());
+    			trxRsp.setBuyer(trx.getUser().getFullname());
     			trxRsp.setProduct(trx.getProductName());
     			
     			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
@@ -142,7 +144,7 @@ public class TransactionController {
     		    String trxLastStatus = null;
     		    while(itr.hasNext()) {
     		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
-    		    	trxLastDate = trxTrail.getStsDate().toString();
+    		    	trxLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, trxTrail.getStsDate());
     		    	trxLastStatus = trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus();
     		    }
     			
@@ -175,7 +177,7 @@ public class TransactionController {
 	    while(itr.hasNext()) {
 	    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
 	    	TransactionTrailRsp trxTrailRsp = new TransactionTrailRsp();
-	    	trxTrailRsp.setTime(trxTrail.getStsDate().toString());
+	    	trxTrailRsp.setTime(DateConverter.parseDate(DateConverter.COMPLETE_DATE, trxTrail.getStsDate()));
 	    	
 	    	if(role.equalsIgnoreCase("buyer")) {
 	    		if(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus() != null) {
@@ -297,7 +299,7 @@ public class TransactionController {
     	    	TransactionTrail trxTrail = itr.next();
     	    	buyerStatus = trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus();
     	    	merchantStatus = trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus();
-    	    	lastTrxDate = trxTrail.getStsDate().toString();
+    	    	lastTrxDate = DateConverter.parseDate(DateConverter.COMPLETE_DATE, trxTrail.getStsDate());
     	    }
         	
         	trxRsp.setBuyerTrxStatus(buyerStatus);
@@ -327,7 +329,7 @@ public class TransactionController {
         while(itr.hasNext()) {
         	TransactionTrail trxTrail = itr.next();
         	TransactionDetailDbRsp trxTrailRsp = new TransactionDetailDbRsp();
-        	trxTrailRsp.setTrxDate(trxTrail.getStsDate().toString());
+        	trxTrailRsp.setTrxDate(DateConverter.parseDate(DateConverter.COMPLETE_DATE, trxTrail.getStsDate()));
         	trxTrailRsp.setBuyerTrxHistory(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatusDesc());
         	trxTrailRsp.setBuyerTrxStatus(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus());
         	trxTrailRsp.setMerchantTrxHistory(trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatusDesc());

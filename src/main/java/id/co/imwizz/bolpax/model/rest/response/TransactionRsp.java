@@ -7,6 +7,7 @@ public class TransactionRsp {
 	private String trxLastStatus;
 	private Double amount;
 	private String merchant;
+	private String buyer;
 	private String product;
 	
 	public String getTrxDate() {
@@ -44,6 +45,12 @@ public class TransactionRsp {
 	}
 	public void setTrxId(long trxId) {
 		this.trxId = trxId;
+	}
+	public String getBuyer() {
+		return buyer;
+	}
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
 	}
 
 }

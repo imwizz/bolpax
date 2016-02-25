@@ -16,6 +16,7 @@ import id.co.imwizz.bolpax.model.rest.response.IssueDetailDbRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueDetailRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueRsp;
 import id.co.imwizz.bolpax.model.rest.response.IssueTrailRsp;
+import id.co.imwizz.bolpax.util.DateConverter;
 import id.co.imwizz.bolpax.util.JsonMapper;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class IssueController {
 		    String issueLastDate = null;
 		    while(itr.hasNext()) {
 		    	IssueTrail issueTrail = (IssueTrail) itr.next();
-		    	issueLastDate = issueTrail.getStsDate().toString();
+		    	issueLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, issueTrail.getStsDate());
 		    }
         	issueRsp.setIssueDate(issueLastDate);
         	
@@ -97,7 +98,7 @@ public class IssueController {
 		    String issueLastDate = null;
 		    while(itr.hasNext()) {
 		    	IssueTrail issueTrail =(IssueTrail) itr.next();
-		    	issueLastDate = issueTrail.getStsDate().toString();
+		    	issueLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, issueTrail.getStsDate());
 		    }
         	issueRsp.setIssueDate(issueLastDate);
         	
@@ -131,7 +132,7 @@ public class IssueController {
         	IssueTrailRsp issueTrailRsp = new IssueTrailRsp();
         	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin().toString());
         	issueTrailRsp.setMessage(issueTrail.getIssueMessage());
-        	issueTrailRsp.setTime(issueTrail.getStsDate().toString());
+        	issueTrailRsp.setTime(DateConverter.parseDate(DateConverter.COMPLETE_DATE, issueTrail.getStsDate()));
         	issueTrailRsp.setIssueStatus(issueTrail.getIssueStatus().getStatus());
         	issueTrailRsps.add(issueTrailRsp);
         }
@@ -207,7 +208,7 @@ public class IssueController {
         	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
 		    while(itr.hasNext()) {
 		    	IssueTrail issueTrail = (IssueTrail) itr.next();
-		    	issueRsp.setLastIssueDate(issueTrail.getStsDate().toString());
+		    	issueRsp.setLastIssueDate(DateConverter.parseDate(DateConverter.COMPLETE_DATE, issueTrail.getStsDate()));
 	        	issueRsp.setLastIssueHistory(issueTrail.getIssueMessage());
 	        	issueRsp.setLastStatus(issueTrail.getIssueStatus().getStatus());
 		    }
@@ -233,7 +234,7 @@ public class IssueController {
         while(itr.hasNext()) {
         	IssueTrail issueTrail = itr.next();
         	IssueDetailDbRsp issueTrailRsp = new IssueDetailDbRsp();
-        	issueTrailRsp.setDate(issueTrail.getStsDate().toString());
+        	issueTrailRsp.setDate(DateConverter.parseDate(DateConverter.COMPLETE_DATE, issueTrail.getStsDate()));
         	issueTrailRsp.setHistory(issueTrail.getIssueMessage());
         	issueTrailRsp.setStatus(issueTrail.getIssueStatus().getStatus());
         	issueTrailRsp.setFromAdmin(issueTrail.getFromAdmin());
