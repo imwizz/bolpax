@@ -182,10 +182,10 @@ public class IssueController {
 		issueTrailDao.persist(issueTrail);
 		
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        headers.add("Content-Type", "application/json; charset=utf-8");
         headers.add("Access-Control-Allow-Origin", "*");
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
