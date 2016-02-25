@@ -24,7 +24,10 @@ public class IssueDaoImpl extends GenericDaoImpl<Issue> implements IssueDao {
 	public List<Issue> findIssueByUserId(long userId) {
 		List<Issue> issues = new ArrayList<Issue>();
 		try {
-			issues = em.createQuery("SELECT i FROM Issue i join i.trx t join t.user u where u.userId = :userId", Issue.class).setParameter("userId", userId).getResultList();
+			issues = em.createQuery("SELECT i FROM Issue i join i.trx t join t.user u where u.userId = :userId and i.reporterRole = :role", Issue.class)
+					.setParameter("userId", userId)
+					.setParameter("role", "buyer")
+					.getResultList();
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {
@@ -37,7 +40,10 @@ public class IssueDaoImpl extends GenericDaoImpl<Issue> implements IssueDao {
 	public List<Issue> findIssueByMerchantId(long merchantId) {
 		List<Issue> issues = new ArrayList<Issue>();
 		try {
-			issues = em.createQuery("SELECT i FROM Issue i join i.trx t join t.merchant m where m.merchantId = :merchantId", Issue.class).setParameter("merchantId", merchantId).getResultList();
+			issues = em.createQuery("SELECT i FROM Issue i join i.trx t join t.merchant m where m.merchantId = :merchantId and i.reporterRole = :role", Issue.class)
+					.setParameter("merchantId", merchantId)
+					.setParameter("role", "merchant")
+					.getResultList();
 		} catch (NoResultException nre){
 
 		} catch (EmptyResultDataAccessException erdae) {
