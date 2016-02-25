@@ -183,6 +183,8 @@ public class IssueController {
 		
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 	
