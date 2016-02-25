@@ -1,7 +1,6 @@
 package id.co.imwizz.bolpax.model;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +52,7 @@ public class IssueTrail {
 	
 	@PrePersist
     protected void onCreate() {
-		stsDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta")).getTime();
+		stsDate = Calendar.getInstance().getTime();
     }
 
 	public long getIssueTrailId() {
