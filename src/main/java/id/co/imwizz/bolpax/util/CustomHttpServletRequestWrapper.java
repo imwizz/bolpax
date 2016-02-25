@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.Map;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -49,7 +50,9 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
         body = stringBuilder.toString();
         String uri = request.getRequestURI();
-        logger.info("\nURI = " + uri + "\nResponse body = " + body);
+        Map<String,String[]> paramsMap = request.getParameterMap();
+        
+        logger.info("\nRequest URI = " + uri + "\nRequest params = " + paramsMap + "\nResponse body = " + body);
     }
 
     @Override
