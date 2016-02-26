@@ -52,7 +52,7 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
         String uri = request.getRequestURI();
         Map<String,String[]> paramsMap = request.getParameterMap();
         
-        logger.info("\nRequest URI = " + uri + "\nRequest params = " + paramsMap + "\nResponse body = " + body);
+        logger.info("Request URI = " + uri + ", Request params = " + paramsMap + ", Request body = " + body);
     }
 
     @Override

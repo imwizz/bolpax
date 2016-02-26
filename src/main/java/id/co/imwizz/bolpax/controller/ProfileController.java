@@ -43,7 +43,9 @@ public class ProfileController {
 	public ResponseEntity<String> doLogin(@RequestParam("phone") String phone, @RequestParam("pass") String pass) {
 		HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        
         User user = userDao.findUserByPhone(phone);
+        Merchant merchant = merchantDao.findMerchantByUserId(user.getUserId());
         
         LoginMandiriRsp loginMandiri = mandiriService.doLogin(phone, pass);
         
@@ -51,6 +53,12 @@ public class ProfileController {
         login.setUserId(user.getUserId());
         login.setToken(loginMandiri.getToken());
         login.setStatus(loginMandiri.getStatus());
+        login.setFullname(user.getFullname());
+        login.setPhone(user.getPhone());
+        if(merchant != null) {
+        	login.setMerchantId(merchant.getMerchantId());
+            login.setMerchantName(merchant.getMerchantName());
+        }
         
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(login), headers, HttpStatus.OK);
 	}
