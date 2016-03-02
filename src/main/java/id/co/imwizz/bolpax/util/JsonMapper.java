@@ -1,7 +1,5 @@
 package id.co.imwizz.bolpax.util;
 
-import id.co.imwizz.bolpax.model.rest.request.TransactionReq;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -11,6 +9,11 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 
+/**
+ * Helper to map json to java object or otherwise
+ *
+ * @author Sangbas
+ */
 public class JsonMapper<T> {
 	
 	protected Class<T> persistentClass;
@@ -28,13 +31,10 @@ public class JsonMapper<T> {
 		try {
 			json = mapper.writeValueAsString(object);
 		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
@@ -47,13 +47,10 @@ public class JsonMapper<T> {
 		try {
 			jsonArray = mapper.writeValueAsString(objects);
 		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
@@ -67,13 +64,10 @@ public class JsonMapper<T> {
 		try {
 			myObjects = mapper.readValue(jsonInput, type);
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return myObjects;
@@ -86,26 +80,23 @@ public class JsonMapper<T> {
 		try {
 			myObjects = mapper.readValue(jsonInput, type);
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return myObjects;
 	}
 	
 	
-	public static void main(String[] args) {
-		TransactionReq trs = new TransactionReq();
-		trs.setAmount(2000.00);
-		trs.setMerchantId(2);
-		trs.setUserId(2);
-		trs.setProduct("sabun");
-		
-		System.out.println(fromObjectToJson(trs));
-	}
+//	public static void main(String[] args) {
+//		TransactionReq trs = new TransactionReq();
+//		trs.setAmount(2000.00);
+//		trs.setMerchantId(2);
+//		trs.setUserId(2);
+//		trs.setProduct("sabun");
+//		
+//		System.out.println(fromObjectToJson(trs));
+//	}
 }

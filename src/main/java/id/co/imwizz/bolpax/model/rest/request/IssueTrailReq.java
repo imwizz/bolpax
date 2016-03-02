@@ -1,5 +1,9 @@
 package id.co.imwizz.bolpax.model.rest.request;
 
+/**
+*
+* @author Sangbas
+*/
 public class IssueTrailReq {
 	
 	private Character fromAdmin;

@@ -34,22 +34,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ * @author Sangbas
+ */
 @RestController
 @RequestMapping("/issue")
 public class IssueController {
 	
-	@Autowired
-	private IssueDao issueDao;
+	@Autowired private IssueDao issueDao;
+	@Autowired private IssueTrailDao issueTrailDao;
+	@Autowired private IssueStatusDao issueStatusDao;
+	@Autowired private TransactionDao trxDao;
 	
-	@Autowired
-	private IssueTrailDao issueTrailDao;
-	
-	@Autowired 
-	private IssueStatusDao issueStatusDao;
-	
-	@Autowired
-	private TransactionDao trxDao;
-	
+	/**
+	 * Returns list of issues by user id
+	 * @param userid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbyuser")
     @ResponseBody
 	public ResponseEntity<String> getListByUserId(@RequestParam("userid") long userid) {
@@ -79,6 +81,11 @@ public class IssueController {
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(issueRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Returns list of issues by merchant id
+	 * @param merchantid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbymerchant")
     @ResponseBody
 	public ResponseEntity<String> getListByMerchantId(@RequestParam("merchantid") long merchantId) {
@@ -97,7 +104,7 @@ public class IssueController {
         	Iterator<IssueTrail> itr = issue.getIssueTrails().iterator();
 		    String issueLastDate = null;
 		    while(itr.hasNext()) {
-		    	IssueTrail issueTrail =(IssueTrail) itr.next();
+		    	IssueTrail issueTrail = (IssueTrail) itr.next();
 		    	issueLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, issueTrail.getStsDate());
 		    }
         	issueRsp.setIssueDate(issueLastDate);
@@ -108,6 +115,11 @@ public class IssueController {
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(issueRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Returns issue detail by its id
+	 * @param issueid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detail")
     @ResponseBody
 	public ResponseEntity<String> getDetail(@RequestParam("issueid") long issueid) {
@@ -143,6 +155,11 @@ public class IssueController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueRsp), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Create a new issue by insert data into table issue and issue_trail
+	 * @param json => accepted json format {"subject":"","desc":"","role":"","trxId":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "create")
 	public ResponseEntity<String> create(@RequestBody String json) {
 		JsonMapper<IssueReq> jMapper = new JsonMapper<IssueReq>(IssueReq.class);
@@ -168,6 +185,11 @@ public class IssueController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueCreation), headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Create a new issue trail by insert data into table issue_trail
+	 * @param json => accepted json format {"fromAdmin":"","message":"","issueId":"","issueStatusId":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "insertTrail")
 	public ResponseEntity<String> insertTrail(@RequestBody String json) {
 		JsonMapper<IssueTrailReq> jMapper = new JsonMapper<IssueTrailReq>(IssueTrailReq.class);
@@ -188,6 +210,10 @@ public class IssueController {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Returns all issues
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
     @ResponseBody
 	public ResponseEntity<String> getAll() {
@@ -221,6 +247,11 @@ public class IssueController {
 		return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Returns complete issue detail by its id
+	 * @param issueid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detailcomplete")
     @ResponseBody
 	public ResponseEntity<String> getDetailCompelete(@RequestParam("issueId") long issueId) {
@@ -248,6 +279,11 @@ public class IssueController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(issueDetails), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Returns suspect name from transaction issue
+	 * @param issue
+	 * @return
+	 */
 	private String getSuspect(Issue issue) {
 		String suspect = null;
 		String role = issue.getReporterRole();

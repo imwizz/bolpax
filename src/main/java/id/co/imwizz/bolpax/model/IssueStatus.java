@@ -11,6 +11,11 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+/**
+ * Simple JavaBean domain object representing an issue_status table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="issue_status")
 public class IssueStatus {

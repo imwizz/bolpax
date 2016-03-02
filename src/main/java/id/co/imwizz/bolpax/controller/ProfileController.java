@@ -25,19 +25,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+*
+* @author Sangbas
+*/
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
 	
-	@Autowired
-	private UserDao userDao;
+	@Autowired private UserDao userDao;
+	@Autowired private MerchantDao merchantDao;
+	@Autowired private MandiriService mandiriService;
 	
-	@Autowired
-	private MerchantDao merchantDao;
-	
-	@Autowired
-	private MandiriService mandiriService;
-	
+	/**
+	 * Login into Mandiri API to get token which will be used for check balance and transfer e-cash
+	 * @param phone
+	 * @param pass
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "dologin")
     @ResponseBody
 	public ResponseEntity<String> doLogin(@RequestParam("phone") String phone, @RequestParam("pass") String pass) {
@@ -63,6 +68,12 @@ public class ProfileController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(login), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Logout from mandiri API
+	 * @param phone
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "dologout")
     @ResponseBody
 	public ResponseEntity<String> doLogout(@RequestParam("phone") String phone, @RequestParam("token") String token) {
@@ -74,6 +85,12 @@ public class ProfileController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(logout), headers, HttpStatus.OK);
 	}
 
+	/**
+	 * Return buyer info from Bolpax and balance info from Mandiri by user id
+	 * @param userid
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "user")
     @ResponseBody
 	public ResponseEntity<String> findUserById(@RequestParam("userid") long userid, @RequestParam("token") String token) {
@@ -87,6 +104,12 @@ public class ProfileController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(userRsp), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Return merchant info from Bolpax and balance info from Mandiri by user id
+	 * @param userid
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "merchant")
     @ResponseBody
 	public ResponseEntity<String> findMerchantById(@RequestParam("userid") long userId, @RequestParam("token") String token) {
@@ -105,6 +128,11 @@ public class ProfileController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(merchantRsp), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Create a new user by insert data into table user
+	 * @param json => accepted json format {"email":"","password":"","phone":"","fullname":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "createUser")
 	public ResponseEntity<String> createUser(@RequestBody String json) {
 		JsonMapper<User> jMapper = new JsonMapper<User>(User.class);
@@ -116,6 +144,11 @@ public class ProfileController {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Create a new merchant by insert data into table merchant
+	 * @param json => accepted json format {"name":"","userId":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "createMerchant")
 	public ResponseEntity<String> createMerchant(@RequestBody String json) {
 		JsonMapper<MerchantReq> jMapper = new JsonMapper<MerchantReq>(MerchantReq.class);

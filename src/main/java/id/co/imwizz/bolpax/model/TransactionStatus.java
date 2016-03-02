@@ -9,6 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Simple JavaBean domain object representing an trx_status table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="trx_status")
 public class TransactionStatus {

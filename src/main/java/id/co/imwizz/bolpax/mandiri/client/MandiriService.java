@@ -12,17 +12,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+* 
+* 
+* @author Sangbas
+*/
 @Service
 public class MandiriService {
 	
-	@Autowired 
-	private RestTemplate restTemplate;
+	@Autowired private RestTemplate restTemplate;
 	
 	private static final String MANDIRI_URI =
 	        "https://api.apim.ibmcloud.com/ex-icha-fmeirisidibmcom-ecash-be/sb/emoney/v1";
 	
 	private static final String UID = "XXXXXXXXXXX";
 	
+	/**
+	 * Login into Mandiri API in order to acquire token
+	 * @param msisdn
+	 * @param credentials
+	 * @return
+	 */
 	public LoginMandiriRsp doLogin(String msisdn, String credentials) {
 		URI targetUrl= UriComponentsBuilder.fromUriString(MANDIRI_URI)
 			    .path("/loginMember")
@@ -35,6 +45,12 @@ public class MandiriService {
 		return login;
 	}
 	
+	/**
+	 * Logout from Mandiri in order to cleanup token session
+	 * @param msisdn
+	 * @param token
+	 * @return
+	 */
 	public LogoutRsp doLogout(String msisdn, String token) {
 		URI targetUrl= UriComponentsBuilder.fromUriString(MANDIRI_URI)
 			    .path("/logoutMember")
@@ -46,6 +62,12 @@ public class MandiriService {
 		return logout;
 	}
 	
+	/**
+	 * Inquiry balance from Mandiri
+	 * @param msisdn
+	 * @param token
+	 * @return
+	 */
 	public BalanceRsp inquiryBalance(String msisdn, String token) {
 		URI targetUrl= UriComponentsBuilder.fromUriString(MANDIRI_URI)
 			    .path("/balanceInquiry")
@@ -56,7 +78,17 @@ public class MandiriService {
 		BalanceRsp login = restTemplate.getForObject(targetUrl, BalanceRsp.class);
 		return login;
 	}
-	
+
+	/**
+	 * Transfer payment action between e-cash members
+	 * @param from
+	 * @param to
+	 * @param amount
+	 * @param description
+	 * @param credentials
+	 * @param token
+	 * @return
+	 */
 	public TransferRsp doTransfer(String from, String to, String amount, String description, String credentials, String token) {
 		URI targetUrl= UriComponentsBuilder.fromUriString(MANDIRI_URI)
 			    .path("/transferMember")

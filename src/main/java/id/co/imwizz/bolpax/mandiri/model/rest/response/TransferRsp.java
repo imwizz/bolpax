@@ -1,5 +1,10 @@
 package id.co.imwizz.bolpax.mandiri.model.rest.response;
 
+/**
+* Simple JavaBean domain object representing an Mandiri transfer response
+*
+* @author Sangbas
+*/
 public class TransferRsp extends BaseRsp {
 
 	private long trxId;

@@ -1,5 +1,10 @@
 package id.co.imwizz.bolpax.model;
 
+/**
+ * Simple JavaBean domain object representing an error info of response service.
+ *
+ * @author Sangbas
+ */
 public class ErrorInfo {
 	
 	private String message;

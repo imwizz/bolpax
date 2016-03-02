@@ -11,6 +11,11 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+/**
+ * Simple JavaBean domain object representing an user table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="user")
 public class User {

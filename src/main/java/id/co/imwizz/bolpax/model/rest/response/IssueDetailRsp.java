@@ -2,6 +2,10 @@ package id.co.imwizz.bolpax.model.rest.response;
 
 import java.util.List;
 
+/**
+*
+* @author Sangbas
+*/
 public class IssueDetailRsp {
 	
 	private String suspect;

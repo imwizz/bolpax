@@ -13,6 +13,11 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+/**
+ * Simple JavaBean domain object representing an merchants table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="merchant")
 public class Merchant {

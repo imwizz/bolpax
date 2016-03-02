@@ -47,40 +47,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+*
+* @author Sangbas
+*/
 @RestController
 @RequestMapping("/trx")
 public class TransactionController {
 	
-	@Autowired
-	private TransactionDao trxDao;
+	@Autowired private TransactionDao trxDao;
+	@Autowired private TransactionTrailDao trxTrailDao;
+	@Autowired private TransactionStatusDao trxStatusDao;
+	@Autowired private TransactionStatusMappingDao trxStatusMappingDao;
+	@Autowired private MerchantDao merchantDao;
+	@Autowired private UserDao userDao;
+	@Autowired private IssueDao issueDao;
+	@Autowired private IssueTrailDao issueTrailDao;
+	@Autowired private IssueStatusDao issueStatusDao;
+	@Autowired private MandiriService mandiriService;
 	
-	@Autowired
-	private TransactionTrailDao trxTrailDao;
-
-	@Autowired
-	private TransactionStatusDao trxStatusDao;
-	
-	@Autowired
-	private TransactionStatusMappingDao trxStatusMappingDao;
-	
-	@Autowired
-	private MerchantDao merchantDao;
-	
-	@Autowired
-	private UserDao userDao;
-	
-	@Autowired
-	private IssueDao issueDao;
-	
-	@Autowired
-	private IssueTrailDao issueTrailDao;
-	
-	@Autowired 
-	private IssueStatusDao issueStatusDao;
-	
-	@Autowired
-	private MandiriService mandiriService;
-	
+	/**
+	 * Return list of transactions by user id
+	 * @param userid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbybuyer")
     @ResponseBody
 	public ResponseEntity<String> getListByBuyer(@RequestParam("userid") long userid) {
@@ -102,6 +92,8 @@ public class TransactionController {
     			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
     		    String trxLastDate = null;
     		    String trxLastStatus = null;
+    		    
+    		    //get last status and last transaction date
     		    while(itr.hasNext()) {
     		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
     		    	if(trxTrail.getTrxStatusMapping().getBuyerTrxStatus().getStatus() != null) {
@@ -120,6 +112,11 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Return list of transactions by merchant id
+	 * @param merchantid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "listbymerchant")
     @ResponseBody
 	public ResponseEntity<String> getListByMerchant(@RequestParam("merchantid") long merchantId) {
@@ -142,8 +139,10 @@ public class TransactionController {
     			Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
     		    String trxLastDate = null;
     		    String trxLastStatus = null;
+    		    
+    		    //get last status and last transaction date
     		    while(itr.hasNext()) {
-    		    	TransactionTrail trxTrail =(TransactionTrail) itr.next();
+    		    	TransactionTrail trxTrail = (TransactionTrail) itr.next();
     		    	trxLastDate = DateConverter.parseDate(DateConverter.SIMPLE_DATE, trxTrail.getStsDate());
     		    	trxLastStatus = trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus();
     		    }
@@ -158,6 +157,11 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectListtoJsonArray(trxRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Return transaction detail by its id
+	 * @param merchantid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detail")
     @ResponseBody
 	public ResponseEntity<String> getDetail(@RequestParam("trxid") long trxid, @RequestParam("role") String role) {
@@ -199,6 +203,11 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trxDetailRsp), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Create a new payment by insert data into table trx and trx_trail then transfer to pool account using Mandiri API
+	 * @param json => accepted json format {"userId":"","merchantId":"","amount":"","product":"","token":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "payment")
 	public ResponseEntity<String> createPayment(@RequestBody String json) {
 		JsonMapper<TransactionReq> jMapper = new JsonMapper<TransactionReq>(TransactionReq.class);
@@ -237,6 +246,12 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Create a new transaction trail by insert data into table trx_trail
+	 * If trxStatusMapping = TRANSACTION_COMPLETE (6) then transfer payment to merchant account using Mandiri API
+	 * @param json => accepted json format {"trxId":"","trxStatusMapping":[{"id":""}]}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "insertTrail")
 	public ResponseEntity<String> insertTrail(@RequestBody String json) {
 		JsonMapper<TransactionTrailReq> jMapper = new JsonMapper<TransactionTrailReq>(TransactionTrailReq.class);
@@ -272,6 +287,10 @@ public class TransactionController {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Return all transactions
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
     @ResponseBody
 	public ResponseEntity<String> getAll() {
@@ -294,6 +313,7 @@ public class TransactionController {
         	trxRsp.setProduct(trx.getProductName());
         	trxRsp.setTrxId(trx.getTrxId());
         	
+        	//get last status and last transaction date
         	Iterator<TransactionTrail> itr = trx.getTrxTrails().iterator();
     	    while(itr.hasNext()) {
     	    	TransactionTrail trxTrail = itr.next();
@@ -314,6 +334,11 @@ public class TransactionController {
 		return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trxRsps), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Return complete detail transaction by trx id
+	 * @param trxId
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "detailcomplete")
     @ResponseBody
 	public ResponseEntity<String> getDetailCompelete(@RequestParam("trxId") long trxId) {
@@ -336,11 +361,15 @@ public class TransactionController {
         	trxTrailRsp.setMerchantTrxStatus(trxTrail.getTrxStatusMapping().getMerchantTrxStatus().getStatus());
         	trxDetails.add(trxTrailRsp);
         }
-        
 		
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(trxDetails), headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * Refund payment to buyer by insert data into table trx_trail and issue_trail then transfer to buyer using Mandiri API
+	 * @param json => accepted json format {"issueId":""}
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "refund")
 	public ResponseEntity<String> doTransfer(@RequestBody String json) {
 		JsonMapper<TransferReq> jMapper = new JsonMapper<TransferReq>(TransferReq.class);
@@ -368,7 +397,6 @@ public class TransactionController {
 		trxTrailDao.persist(trxTrail);
 
 		// issue changed to refund
-		// Issue issue = issueDao.findIssueByTrxId(trxId);
 		IssueStatus issueRefund = issueStatusDao.get(Long.valueOf(5));
 		IssueTrail issueTrailRefund = new IssueTrail(Character.valueOf('Y'),
 				"Proses refund telah dilakukan", issue, issueRefund);
@@ -387,6 +415,11 @@ public class TransactionController {
         return new ResponseEntity<String>(JsonMapper.fromObjectToJson(transfer), headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Return refund status from transaction
+	 * @param trx
+	 * @return
+	 */
 	private boolean isRefund(Transaction trx) {
 		Iterator<Issue> itrIssue = trx.getIssues().iterator();
     	while(itrIssue.hasNext()) {

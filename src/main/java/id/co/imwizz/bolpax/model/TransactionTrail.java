@@ -13,6 +13,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * Simple JavaBean domain object representing an trx_trail table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="trx_trail")
 public class TransactionTrail {

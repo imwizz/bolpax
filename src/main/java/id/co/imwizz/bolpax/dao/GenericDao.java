@@ -3,6 +3,17 @@ package id.co.imwizz.bolpax.dao;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for a Data Access Object that can be used for a single specified
+ * type domain object. A single instance implementing this interface can be used
+ * only for the type of domain object specified in the type parameters.
+ * 
+ * @author Sangbas
+ * 
+ * @param <T>
+ *            The type of the domain object for which this instance is to be
+ *            used.
+ */
 public interface GenericDao <T> {
 
     /**

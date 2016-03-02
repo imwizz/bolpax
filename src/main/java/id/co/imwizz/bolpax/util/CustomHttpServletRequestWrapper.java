@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Wrapper used to be able to consume multiple times the InputStream provided by
+ * HttpServletRequest
+ *
+ * @author Sangbas
+ */
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private static final Logger logger = Logger.getLogger(CustomHttpServletRequestWrapper.class);

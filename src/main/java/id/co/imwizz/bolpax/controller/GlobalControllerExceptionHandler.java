@@ -14,9 +14,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Controller for error handling.
+ *
+ * @author Sangbas
+ */
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 	
+	/**
+	 * Returns error info in json form
+	 * @param httpServletRequest
+	 * @param throwable
+	 * @return
+	 */
 	@ExceptionHandler
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
@@ -32,6 +43,11 @@ public class GlobalControllerExceptionHandler {
 		return errorInfo;
 	}
 
+	/**
+	 * Returns HTTP request body 
+	 * @param httpServletRequest
+	 * @return
+	 */
 	private String getBody(HttpServletRequest request) {
 		StringBuilder stringBuilder = new StringBuilder();
 		BufferedReader reader = null;
@@ -55,6 +71,11 @@ public class GlobalControllerExceptionHandler {
 		return stringBuilder.toString();
 	}
 	
+	/**
+	 * Returns stack trace which come from bolpax source code 
+	 * @param stackTraceElement
+	 * @return
+	 */
 	private String getStackTrace(StackTraceElement[] trace) {
 		for (StackTraceElement traceElement : trace) {
         	if(traceElement.getClassName().contains("id.co.imwizz.bolpax")) {

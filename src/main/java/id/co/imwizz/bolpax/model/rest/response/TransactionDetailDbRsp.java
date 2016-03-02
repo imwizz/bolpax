@@ -1,5 +1,9 @@
 package id.co.imwizz.bolpax.model.rest.response;
 
+/**
+*
+* @author Sangbas
+*/
 public class TransactionDetailDbRsp {
 	
 	private String trxDate;

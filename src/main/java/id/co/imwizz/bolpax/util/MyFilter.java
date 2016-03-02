@@ -10,6 +10,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Filter to wrap the request
+ *
+ * @author Sangbas
+ */
 public class MyFilter implements Filter {
 
     public void init(FilterConfig fc) throws ServletException {

@@ -11,6 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Simple JavaBean domain object representing an trx_status_mapping table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="trx_status_mapping")
 public class TransactionStatusMapping {

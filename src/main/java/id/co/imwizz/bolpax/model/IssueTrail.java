@@ -13,6 +13,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * Simple JavaBean domain object representing an issue_trail table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="issue_trail")
 public class IssueTrail {

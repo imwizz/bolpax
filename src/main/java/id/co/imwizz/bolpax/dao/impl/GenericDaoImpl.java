@@ -14,6 +14,15 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementation of <code>GenericDAO</code> using Hibernate.
+ * 
+ * @author Sangbas
+ * 
+ * @param <T>
+ *            The type of the domain object for which this instance is to be
+ *            used.
+ */
 public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 	
 	@PersistenceContext

@@ -1,5 +1,10 @@
 package id.co.imwizz.bolpax.mandiri.model.rest.response;
 
+/**
+* Simple JavaBean domain object representing an Mandiri balance response
+*
+* @author Sangbas
+*/
 public class BalanceRsp extends BaseRsp {
 
 	private String creditLimit;

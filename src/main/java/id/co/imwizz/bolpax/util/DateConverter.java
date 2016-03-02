@@ -4,6 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Helper to format the date pattern
+ *
+ * @author Sangbas
+ */
 public class DateConverter {
 	
 	public static final String SIMPLE_DATE = "dd/MM/yyyy";

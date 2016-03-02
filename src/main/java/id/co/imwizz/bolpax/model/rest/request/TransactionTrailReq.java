@@ -2,6 +2,10 @@ package id.co.imwizz.bolpax.model.rest.request;
 
 import java.util.List;
 
+/**
+*
+* @author Sangbas
+*/
 public class TransactionTrailReq {
 	
 	private long trxId;

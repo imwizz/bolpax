@@ -16,13 +16,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+*
+* @author Sangbas
+*/
 @RestController
 @RequestMapping("/merchant")
 public class MerchantController {
 	
-	@Autowired
-	private MerchantDao merchantDao;
+	@Autowired private MerchantDao merchantDao;
 
+	/**
+	 * Returns all merchants except user login
+	 * @param userid
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json", value = "list")
     @ResponseBody
 	public ResponseEntity<String> findUserByPhone(@RequestParam("userid") long userId) {

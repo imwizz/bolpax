@@ -15,6 +15,11 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+/**
+ * Simple JavaBean domain object representing an trx table.
+ *
+ * @author Sangbas
+ */
 @Entity
 @Table(name="trx")
 public class Transaction {
